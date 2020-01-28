@@ -63,6 +63,9 @@ import axios from 'axios';
 import Vue from 'vue';
 export default {
   mounted(){
+    if(window.innerWidth < 800) {
+      this.visibleDays = 1
+    }
     this.getWeek()
     axios.get('https://minhacliente.com.br/wp-json/wp/v2/categoria?_embed&__hide_empty=1')
       .then(res => {
@@ -371,4 +374,43 @@ export default {
       flex 1
       min-width 300px
       padding 15px
+@media all and (max-width: 800px)
+  .agenda 
+    .main
+      padding 15px
+    .search
+      padding-left 15px
+      padding-right 15px
+      form
+        &:before
+          content 'Pesquisar'
+          display block
+          color #f43
+          text-transform uppercase
+          font-size 16px
+          font-weight bold
+          position absolute
+          top -25px
+          left 0
+          text-align center
+          width 100%
+        button
+          display none
+    .lista 
+      .list-title
+        text-align center
+      .daybar 
+        .logo
+          display none
+        .days-carousel
+          margin-left 15px
+          margin-right 15px
+        .now
+          text-align center
+          .day-number
+            font-size 28px
+            line-height 74px
+            background #f43
+            color #fff
+            margin 15px 15px
 </style>
