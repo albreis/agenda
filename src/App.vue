@@ -1,9 +1,20 @@
 <template>
     <div class="content-main">
+        <app-header></app-header>
         <!-- Renderiza a rota -->
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
     </div>
 </template>
+<script>
+import Vue from 'vue'
+import Header from './components/Header.vue';
+
+export default {    
+  components: {
+    appHeader: Header
+  }
+}
+</script>
 
 <style lang="stylus">
 * {

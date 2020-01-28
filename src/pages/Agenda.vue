@@ -1,6 +1,5 @@
 <template lang="pug">
   div
-    app-header(:categorias="categorias")
     .agenda
       .search
         form
@@ -61,12 +60,8 @@
 </template>
 <script>
 import Vue from 'vue';
-import Header from '../components/Header.vue';
 
 export default {
-  components: {
-    appHeader: Header
-  },
 
   mounted(){
     if(window.innerWidth < 800) {

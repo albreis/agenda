@@ -1,9 +1,9 @@
 <template>
   <header id="header">
-    <h1>Agenda VueJS</h1>
+    <h1 @click="$router.push('/')">Agenda VueJS</h1>
     <ul>
-      <li v-for="cat in categorias" :key="cat.id">
-        <router-link :to="cat.slug">
+      <li v-for="cat in categorias" :key="cat.name">
+        <router-link :to="{path: cat.slug, name: cat.name}">
           {{ cat.name }}
         </router-link>
       </li>
@@ -14,10 +14,15 @@
 export default {
   data() {
     return {
-
+      categorias: []
     }
   },
-  props: ['categorias']
+  mounted() {
+    this.$http.get('categoria?_embed&__hide_empty=1')
+      .then(res => {
+        this.categorias = res.data
+      })
+  }
 }
 </script>
 <style lang="stylus">
