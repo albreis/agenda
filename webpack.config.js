@@ -156,7 +156,9 @@ let config = {
         compress: true,
         port: 9000,
         host: '127.0.0.1',
-        liveReload: false
+        liveReload: false,
+        writeToDisk: true,
+        hot: true
     },
     resolve: {
       extensions: ['.vue', '.tsx', '.ts', '.js', '.jsx', '.scss', '.styl', '.sass', '.jade', '.css', '.gif', '.png', '.jpg', '.jpeg', '.svg']
