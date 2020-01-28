@@ -4,9 +4,9 @@ import App from './App';
 import Agenda from './pages/Agenda.vue';
 import AgendaSingle from './pages/AgendaSingle';
 import '@fortawesome/fontawesome-free/js/fontawesome';
-import axios from 'axios';
+import axios from './Request.js';
 
-Vue.use(axios);
+Vue.prototype.$http = axios
 
 Vue.use(Router);
 

@@ -59,7 +59,6 @@
           
 </template>
 <script>
-import axios from 'axios';
 import Vue from 'vue';
 export default {
   mounted(){
@@ -67,7 +66,7 @@ export default {
       this.visibleDays = 1
     }
     this.getWeek()
-    axios.get('https://minhacliente.com.br/wp-json/wp/v2/categoria?_embed&__hide_empty=1')
+    this.$http.get('categoria?_embed&__hide_empty=1')
       .then(res => {
         this.categorias = res.data
         this.getPosts()
@@ -101,7 +100,7 @@ export default {
 
     getPosts() {      
       for(var i in this.categorias) {
-        axios.get('http://minhacliente.com.br/wp-json/wp/v2/agenda?_embed&categoria[]=' + this.categorias[i].id + '&dia_de_inicio=' + this.activeDay.valueOf())
+        this.$http.get('agenda?_embed&categoria[]=' + this.categorias[i].id + '&dia_de_inicio=' + this.activeDay.valueOf())
         .then(resp => {
           Vue.set(this.categorias[i], 'posts', resp.data)
           this.categorias[i].page = 0
