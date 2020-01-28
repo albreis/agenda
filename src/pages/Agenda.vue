@@ -326,7 +326,7 @@ export default {
             left 5px
           .events
             display flex
-            justify-content space-between
+            justify-content left
             align-items center
             margin 0 -15px
             flex-wrap wrap
