@@ -91,7 +91,9 @@ let config = {
             {
                 test: /\.ts$/,
                 loader: 'ts-loader',
-                options: { appendTsSuffixTo: [/\.vue$/] }
+                options: { 
+                  appendTsSuffixTo: [/\.vue$/],
+                }
             },
             {
               test: /\.tsx?$/,
@@ -157,7 +159,7 @@ let config = {
         liveReload: false
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js', '.jsx', '.scss', '.styl', '.sass', '.jade', '.css', '.gif', '.png', '.jpg', '.jpeg', '.svg']
+      extensions: ['.vue', '.tsx', '.ts', '.js', '.jsx', '.scss', '.styl', '.sass', '.jade', '.css', '.gif', '.png', '.jpg', '.jpeg', '.svg']
     }
 };
 

@@ -1,21 +1,30 @@
 {
   "compilerOptions": {
-    "module": "ES6",
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "sourceMap": true
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "es5",
+      "dom",
+      "es2017"
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./www",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "listEmittedFiles": true
   },
-  "paths": {
-    "@/*": [
-      "src/*"
-    ]
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.vue"
+  "files": [
+    "src/shims.d.ts"
   ],
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "src/**/*.vue"
   ]
 }

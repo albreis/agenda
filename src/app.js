@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import App from './App.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import App from './App';
 import Agenda from './pages/Agenda.vue';
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import axios from 'axios';
 
 Vue.use(axios);
 
-Vue.use(Router)
+Vue.use(Router);
 
 Date.prototype.addDays = function(days) {
   this.setDate(this.getDate()+days);
