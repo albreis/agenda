@@ -48,15 +48,16 @@ export default {
       flex 1
       white-space nowrap
       justify-content space-evenly
-      line-height 66px
+      line-height 26px
       border-bottom 5px solid transparent
+      font-weight bold
       &+li
         margin-left 30px
       &.active
         border-bottom 5px solid #fff
         font-weight bold
         a
-          color #ff0
+          color #f5f500
       a
         color #fff
         text-decoration none
