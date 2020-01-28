@@ -7,8 +7,8 @@ import Vue from 'vue';
  * Importação do events bus para trabalhar
  * com eventos globais dentro da aplicação
  */
-import { EventBus } from './event-bus.js';
 import { Component, Watch } from 'vue-property-decorator'
+
 /**
  * Class based components
  */
@@ -17,7 +17,7 @@ export default class App extends Vue {
     /**
      * Inicializa os dados
      */
-    config: Object;
+    config: Object = {}
 
     mounted() {
 

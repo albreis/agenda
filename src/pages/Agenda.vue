@@ -1,66 +1,73 @@
 <template lang="pug">
-  .agenda
-    .search
-      form
-        .fa.fa-search  
-        input(type="search" v-model="s" placeholder="Nome do evento ou local")
-        button(type="button") Encontrar
-    .lista
-      .container
-        h3.list-title 
-          .fa.fa-calendar-alt
-          | Eventos do dia
-        .daybar
-          .now
-            .day-number {{now.getDate()}}
-            .day-text
-              .day-name {{days[now.getDay()]}}
-              .day-my 
-                span {{months[now.getMonth()]}} 
-                span {{now.getYear().toString().substr(1, 2)}}
-          .days-carousel
-            .prev(@click="prev")
-              .fa.fa-angle-left
-            .days
-              .day(v-for="day in week_days" :class="{active: day==activeDay}" @click="activeDay=day")
-                .day-name {{days[day.getDay()].substr(0, 3)}}
-                .day-number {{day.getDate()}}
-                .month {{months[day.getMonth()]}}
-            .next(@click="next")
-              .fa.fa-angle-right
-          img(src="https://via.placeholder.com/100x100").logo
-        .main
-          .categories
-            .category(v-for="category in categorias" v-if="category.posts && category.posts.length")
-              router-link.category-title(:to="'categoria/' + category.slug") {{category.name}}
-              hr
-              .carousel
-                .prev
-                  .fa.fa-chevron-left
-                .events
-                  a.event(href="#" v-for="post in category.posts")
-                    .date
-                      .far.fa-clock
-                      span 
-                        span(v-if="post.acf.dia_de_inicio") De {{post.acf.dia_de_inicio}}
-                        span(v-if="post.acf.hora_de_inicio") - {{post.acf.hora_de_inicio}}
-                        span(v-if="post.acf.dia_de_termino") a {{post.acf.dia_de_termino}}
-                        span(v-if="post.acf.hora_de_termino") - {{post.acf.hora_de_termino}}
-                    .tags
-                      .tag(v-for="tag in post._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
-                    .image(v-if="getImage(post)")
-                      img(:src="getImage(post)")
-                    h4.headline {{post.acf.headline}}
-                    h3.title {{post.title.rendered}}
-                .next
-                  .fa.fa-chevron-right
-          .sidebar(v-if="0")
-            | sidebar
-          
+  div
+    app-header(:categorias="categorias")
+    .agenda
+      .search
+        form
+          .fa.fa-search  
+          input(type="search" v-model="s" placeholder="Nome do evento ou local")
+          button(type="button") Encontrar
+      .lista
+        .container
+          h3.list-title 
+            .fa.fa-calendar-alt
+            | Eventos do dia
+          .daybar
+            .now
+              .day-number {{now.getDate()}}
+              .day-text
+                .day-name {{days[now.getDay()]}}
+                .day-my 
+                  span {{months[now.getMonth()]}} 
+                  span {{now.getYear().toString().substr(1, 2)}}
+            .days-carousel
+              .prev(@click="prev")
+                .fa.fa-angle-left
+              .days
+                .day(v-for="day in week_days" :class="{active: day==activeDay}" @click="activeDay=day")
+                  .day-name {{days[day.getDay()].substr(0, 3)}}
+                  .day-number {{day.getDate()}}
+                  .month {{months[day.getMonth()]}}
+              .next(@click="next")
+                .fa.fa-angle-right
+            img(src="https://via.placeholder.com/100x100").logo
+          .main
+            .categories
+              .category(v-for="category in categorias" v-if="category.posts && category.posts.length")
+                router-link.category-title(:to="'categoria/' + category.slug") {{category.name}}
+                hr
+                .carousel
+                  .prev
+                    .fa.fa-chevron-left
+                  .events
+                    a.event(href="#" v-for="post in category.posts")
+                      .date
+                        .far.fa-clock
+                        span 
+                          span(v-if="post.acf.dia_de_inicio") De {{post.acf.dia_de_inicio}}
+                          span(v-if="post.acf.hora_de_inicio") - {{post.acf.hora_de_inicio}}
+                          span(v-if="post.acf.dia_de_termino") a {{post.acf.dia_de_termino}}
+                          span(v-if="post.acf.hora_de_termino") - {{post.acf.hora_de_termino}}
+                      .tags
+                        .tag(v-for="tag in post._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
+                      .image(v-if="getImage(post)")
+                        img(:src="getImage(post)")
+                      h4.headline {{post.acf.headline}}
+                      h3.title {{post.title.rendered}}
+                  .next
+                    .fa.fa-chevron-right
+            .sidebar(v-if="0")
+              | sidebar
 </template>
 <script>
 import Vue from 'vue';
+import Header from '../components/Header.vue';
+
 export default {
+  components: {
+    appHeader: Header
+  },
+
   mounted(){
     if(window.innerWidth < 800) {
       this.visibleDays = 1
@@ -198,6 +205,9 @@ export default {
         border-bottom-right-radius 50px
         line-height 46px
         padding 0 50px
+        cursor pointer
+        &:focus
+          outline none
   .lista
     .list-title
       color #f43

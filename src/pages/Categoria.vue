@@ -1,6 +1,6 @@
 <template>
   <div>
-    Single
+    Categoria
   </div>
 </template>
 <script>
