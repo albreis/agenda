@@ -63,7 +63,7 @@ import Vue from 'vue';
 
 export default {
 
-  mounted(){
+  created(){
     if(window.innerWidth < 800) {
       this.visibleDays = 1
     }

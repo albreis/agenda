@@ -1,4 +1,4 @@
-# agenda
+# Vuegenda
 
 Projeto Open Source de agenda de eventos feita com VueJS
 
