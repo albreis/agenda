@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import App from './App';
 import Agenda from './pages/Agenda.vue';
+import AgendaSingle from './pages/AgendaSingle';
 import '@fortawesome/fontawesome-free/js/fontawesome';
 import axios from 'axios';
 
@@ -19,7 +20,8 @@ Date.prototype.subDays = function(days) {
 }
 
 const routes = [
-  { path: '/', component: Agenda }
+  { path: '/', component: Agenda },
+  { path: '/[:id]', component: AgendaSingle }
 ]
 
 // 3. Create the router instance and pass the `routes` option
