@@ -4,7 +4,7 @@ import axios from 'axios'
  * Inicializa o axios com a base da nossa API
  */
 const instance = axios.create({
-  baseURL: 'http://minhacliente.com.br/wp-json/wp/v2/'
+  baseURL: 'https://minhacliente.com.br/wp-json/wp/v2/'
 })
 
 /**
