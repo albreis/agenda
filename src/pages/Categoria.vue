@@ -33,26 +33,13 @@
           .main
             .categories
               .category
-                router-link.category-title(:to="'categoria/' + $router.path") {{category}}
+                router-link.category-title(:to="category.slug") {{category.name}}
                 hr
                 .carousel
                   .prev
                     .fa.fa-chevron-left
                   .events
-                    a.event(href="#" v-for="post in posts")
-                      .date
-                        .far.fa-clock
-                        span 
-                          span(v-if="post.acf.dia_de_inicio") De {{post.acf.dia_de_inicio}}
-                          span(v-if="post.acf.hora_de_inicio") - {{post.acf.hora_de_inicio}}
-                          span(v-if="post.acf.dia_de_termino") a {{post.acf.dia_de_termino}}
-                          span(v-if="post.acf.hora_de_termino") - {{post.acf.hora_de_termino}}
-                      .tags
-                        .tag(v-for="tag in post._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
-                      .image(v-if="getImage(post)")
-                        img(:src="getImage(post)")
-                      h4.headline {{post.acf.headline}}
-                      h3.title {{post.title.rendered}}
+                    grid-item(v-for="post in posts" :item="post" :category="category")
                   .next
                     .fa.fa-chevron-right
             .sidebar(v-if="0")
@@ -60,20 +47,17 @@
 </template>
 <script>
 import Vue from 'vue';
+import GridItem from '../components/GridItem.vue';
 
 export default {
 
-  created(){
-    if(window.innerWidth < 800) {
-      this.visibleDays = 1
-    }
-    this.getWeek()
-    this.getPosts()
+  components: {
+    gridItem: GridItem
   },
 
   data() {
     return {
-      category: '',
+      category: {},
       posts: [],
       page: 0,
       week: 0,
@@ -88,37 +72,38 @@ export default {
       selectedDate: new Date
     }
   },
+
+  mounted(){
+    console.log('route', this.$route)
+    if(window.innerWidth < 800) {
+      this.visibleDays = 1
+    }
+    
+      console.log('category', this.$route)
+    this.$http.get('categoria?slug=' + this.$route.params.category)
+    .then(resp => {
+      this.category = resp.data[0]
+      console.log('category', resp)
+      //this.categorias.push(this.categorias[i])
+      this.getPosts()
+    })
+
+    this.getWeek()
+  },
   
   methods: {
-    getImage(post) {
-      var img = post._embedded['wp:featuredmedia'][0].media_details;
-      if(img) {
-        return post._embedded['wp:featuredmedia'][0].media_details.sizes.medium.source_url;
-      }
-      return 'https://via.placeholder.com/388x214';
-    },
 
     getPosts() {
-      console.log(this.$route)
-      this.$http.get('agenda?_embed&categoria[]=' + this.$route.params.slug + '&dia_de_inicio=' + this.activeDay.valueOf())
+      
+      if(!this.category.id) return;
+
+      this.$http.get('agenda?_embed&categoria[]=' + this.category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
       .then(resp => {
         this.posts = resp.data
         this.page = 0
         console.log(resp)
         //this.categorias.push(this.categorias[i])
       })
-    },
-    
-    nextPage(category) {
-      if(category.page < category.posts.length){
-        category.page++
-      }
-    },
-
-    prevPage(category) {
-      if(category.page > 0){
-        category.page--
-      }
     },
 
     getWeek() {
@@ -149,11 +134,8 @@ export default {
   watch: {
     activeDay() {
       this.getPosts()
-    },
-
-    '$route': () => {
-      this.getPosts()
     }
+
   }
 }
 </script>

@@ -32,27 +32,14 @@
             img(src="https://via.placeholder.com/100x100").logo
           .main
             .categories
-              .category(v-for="category in categorias" v-if="category.posts && category.posts.length")
+              .category(v-for="category in categorias")
                 router-link.category-title(:to="'categoria/' + category.slug") {{category.name}}
                 hr
                 .carousel
                   .prev
                     .fa.fa-chevron-left
                   .events
-                    a.event(href="#" v-for="post in category.posts")
-                      .date
-                        .far.fa-clock
-                        span 
-                          span(v-if="post.acf.dia_de_inicio") De {{post.acf.dia_de_inicio}}
-                          span(v-if="post.acf.hora_de_inicio") - {{post.acf.hora_de_inicio}}
-                          span(v-if="post.acf.dia_de_termino") a {{post.acf.dia_de_termino}}
-                          span(v-if="post.acf.hora_de_termino") - {{post.acf.hora_de_termino}}
-                      .tags
-                        .tag(v-for="tag in post._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
-                      .image(v-if="getImage(post)")
-                        img(:src="getImage(post)")
-                      h4.headline {{post.acf.headline}}
-                      h3.title {{post.title.rendered}}
+                    grid-item(v-for="post in category.posts" :item="post" :category="category")
                   .next
                     .fa.fa-chevron-right
             .sidebar(v-if="0")
@@ -60,8 +47,13 @@
 </template>
 <script>
 import Vue from 'vue';
+import GridItem from '../components/GridItem';
 
 export default {
+
+  components: {
+    gridItem: GridItem
+  },
 
   mounted(){
     if(window.innerWidth < 800) {
@@ -78,6 +70,7 @@ export default {
   data() {
     return {
       categorias: [],
+      posts: [],
       week: 0,
       visibleDays: 7,
       activeDay: false,
@@ -92,24 +85,21 @@ export default {
   },
   
   methods: {
-    getImage(post) {
-      var img = post._embedded['wp:featuredmedia'][0].media_details;
-      if(img) {
-        return post._embedded['wp:featuredmedia'][0].media_details.sizes.medium.source_url;
-      }
-      return 'https://via.placeholder.com/388x214';
+
+    getPosts() {
+      this._getPosts(0)
     },
 
-    getPosts() {      
-      for(var i in this.categorias) {
-        this.$http.get('agenda?_embed&categoria[]=' + this.categorias[i].id + '&dia_de_inicio=' + this.activeDay.valueOf())
-        .then(resp => {
-          Vue.set(this.categorias[i], 'posts', resp.data)
-          this.categorias[i].page = 0
-          console.log(resp)
-          //this.categorias.push(this.categorias[i])
-        })
-      }
+    _getPosts(index) {
+      var category = this.categorias[index]
+      this.$http.get('agenda?_embed&categoria[]=' + category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
+      .then(resp => {
+        Vue.set(category, 'posts', resp.data)
+        console.log(resp)
+        if(index+1 < this.categorias.length){
+          this._getPosts(index+1)
+        }
+      })
     },
     
     nextPage(category) {
@@ -334,46 +324,6 @@ export default {
             align-items center
             margin 0 -15px
             flex-wrap wrap
-            .event
-              flex-grow 1
-              flex-basis 300px
-              min-width 250px
-              max-width 380px
-              margin 0 15px 30px 15px
-              .date
-                font-size 12px
-                color #777
-                font-weight bold
-                .far
-                  margin-right 5px
-                  color #f43
-                span
-                  span
-                    margin 0 4px 0 0
-              .tags
-                .tag
-                  background #e06
-                  padding 2px 15px
-                  border-radius 10px
-                  margin 5px 0
-                  color #fff
-                  font-weight bold
-                  text-transform uppercase 
-                  display inline-block
-                  font-size 10px 
-              .image
-                img
-                  border-radius 10px
-                  width 100%
-              .headline
-                font-size 12px
-                text-transform uppercase
-                color #f43
-                margin 10px 0
-              .title
-                font-size 16px
-                color #444
-                margin 5px 0
     .sidebar
       flex 1
       min-width 300px

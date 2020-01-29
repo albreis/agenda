@@ -2,8 +2,8 @@
   <header id="header">
     <h1 @click="$router.push('/')">Vuegenda</h1>
     <ul>
-      <li v-for="cat in categorias" :key="cat.name" :class="{active: $route.path == cat.slug}">
-        <router-link :to="{path: cat.slug, name: cat.name}">
+      <li v-for="cat in categorias" :key="cat.name" :class="{active: $route.params.category == cat.slug}">
+        <router-link :to="{path: '/' + cat.slug, params: {name: cat.name, id: cat.id}}">
           {{ cat.name }}
         </router-link>
       </li>
@@ -36,11 +36,12 @@ export default {
     flex 1
     margin 0
     padding 15px
+    cursor pointer
   ul
     flex 2
     list-style none
     padding 0
-    margin 0
+    margin 0 30px 0 0
     display flex
     align-items right
     li
