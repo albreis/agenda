@@ -26,6 +26,12 @@ export default {
       .then(res => {
         this.categorias = res.data
       })
+  },
+  
+  watch: {
+    '$route': function(){
+      this.showMenuMobile = false
+    }
   }
 }
 </script>
@@ -105,11 +111,12 @@ export default {
         padding 10px 0
         text-align left
         min-width 100%
+        border-bottom none
         a
           width 100%
           padding 0 15px
         &.active
-          border none
+          border-bottom none
       li + li
         margin-left 0
 
