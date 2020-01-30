@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.event(:to="`${category.slug}/${item.slug}`" )
+router-link.event(:to="`${item._embedded['wp:term'][0][0].slug}/${item.slug}`")
   .date
     .far.fa-clock
     span 
@@ -7,7 +7,7 @@ router-link.event(:to="`${category.slug}/${item.slug}`" )
       span(v-if="item.acf.hora_de_inicio") - {{item.acf.hora_de_inicio}}
       span(v-if="item.acf.dia_de_termino") a {{item.acf.dia_de_termino}}
       span(v-if="item.acf.hora_de_termino") - {{item.acf.hora_de_termino}}
-  .tags
+  .tags(v-if="item._embedded")
     .tag(v-for="tag in item._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
   .image(v-if="getImage(item)")
     img(:src="getImage(item)")

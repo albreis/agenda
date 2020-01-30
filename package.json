@@ -20,6 +20,7 @@
     "jspdf": "^1.5.3",
     "reflect-metadata": "^0.1.13",
     "vue": "^2.6.11",
+    "vue-analytics": "^5.22.1",
     "vue-loader": "^15.8.3",
     "vue-property-decorator": "^8.3.0",
     "vue-router": "^3.1.5",

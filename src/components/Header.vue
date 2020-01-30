@@ -3,7 +3,7 @@
     <h1 @click="$router.push('/')">Vuegenda</h1>
     <ul>
       <li v-for="cat in categorias" :key="cat.name" :class="{active: $route.params.category == cat.slug}">
-        <router-link :to="{path: '/' + cat.slug, params: {name: cat.name, id: cat.id}}">
+        <router-link :to="{path: '/' + cat.slug, params: {name: cat.name, id: cat.id}, meta: {title: cat.name}}">
           {{ cat.name }}
         </router-link>
       </li>
