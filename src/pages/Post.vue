@@ -1,6 +1,6 @@
 <template lang="pug">
   .container
-    .single-post
+    .single-post(v-if="post")
       h1 {{post.title.rendered}}
       .post-content(v-html="post.content.rendered")
 

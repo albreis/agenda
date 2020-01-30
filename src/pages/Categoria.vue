@@ -32,7 +32,7 @@
             img(src="https://via.placeholder.com/100x100").logo
           .main
             .categories
-              .category
+              .category(v-if="category")
                 router-link.category-title(:to="category.slug") {{category.name}}
                 hr
                 .carousel
@@ -89,6 +89,7 @@ export default {
     })
 
     this.getWeek()
+
   },
   
   methods: {

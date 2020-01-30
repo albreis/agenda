@@ -28,14 +28,14 @@
             img(src="https://via.placeholder.com/100x100").logo
           .main
             .categories
-              .category(v-for="category in categorias")
-                router-link.category-title(:to="'categoria/' + category.slug") {{category.name}}
+              .category
+                .category-title Pesquisando: {{s}}
                 hr
                 .carousel
                   .prev
                     .fa.fa-chevron-left
                   .events
-                    grid-item(v-for="post in category.posts" :item="post" :category="category")
+                    grid-item(v-for="post in posts" :item="post")
                   .next
                     .fa.fa-chevron-right
             .sidebar(v-if="0")
@@ -43,7 +43,7 @@
 </template>
 <script>
 import Vue from 'vue';
-import GridItem from '../components/GridItem';
+import GridItem from '../components/GridItem.vue';
 import Search from '../components/Search.vue';
 
 export default {
@@ -53,22 +53,11 @@ export default {
     appSearch: Search
   },
 
-  mounted(){
-    if(window.innerWidth < 800) {
-      this.visibleDays = 1
-    }
-    this.getWeek()
-    this.$http.get('categoria?_embed&__hide_empty=1')
-      .then(res => {
-        this.categorias = res.data
-        this.getPosts()
-      })
-  },
-
   data() {
     return {
-      categorias: [],
+      category: {},
       posts: [],
+      page: 0,
       week: 0,
       visibleDays: 7,
       activeDay: false,
@@ -81,35 +70,29 @@ export default {
       selectedDate: new Date
     }
   },
+
+  mounted(){
+
+    this.s = this.$route.query.s
+
+    if(window.innerWidth < 800) {
+      this.visibleDays = 1
+    }
+    this.getWeek()
+
+    this.getPosts()
+    console.log(location)
+
+  },
   
   methods: {
 
-    getPosts() {
-      this._getPosts(0)
-    },
-
-    _getPosts(index) {
-      var category = this.categorias[index]
-      this.$http.get('agenda?_embed&categoria[]=' + category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
+    getPosts() {      
+      this.$http.get('agenda?_embed&s=' + this.s + '&dia_de_inicio=' + this.activeDay.valueOf())
       .then(resp => {
-        Vue.set(category, 'posts', resp.data)
-        console.log(resp)
-        if(index+1 < this.categorias.length){
-          this._getPosts(index+1)
-        }
+        this.posts = resp.data
+    console.log('route', this.posts[0])
       })
-    },
-    
-    nextPage(category) {
-      if(category.page < category.posts.length){
-        category.page++
-      }
-    },
-
-    prevPage(category) {
-      if(category.page > 0){
-        category.page--
-      }
     },
 
     getWeek() {
@@ -141,11 +124,57 @@ export default {
     activeDay() {
       this.getPosts()
     }
+
   }
 }
 </script>
 <style scoped lang="stylus">
 .agenda
+  .search
+    display flex
+    justify-content center
+    align-items center
+    height 150px
+    form
+      position relative
+      display flex
+      flex 1
+      max-width 800px
+      margin auto
+      border-radius 50px
+      padding 10px
+      border 1px solid #ddd
+      .fa
+        font-size 24px
+        color #ddd
+      input
+        border none
+        height 24px
+        width 100%
+        padding 0 10px
+        &:focus
+          outline none
+        &::placeholder
+          color #999
+          font-size 15px
+      button
+        background #f43
+        border none
+        font-weight 900
+        font-size 12px
+        text-transform uppercase
+        color #fff
+        text-align center
+        position absolute
+        top -1px
+        right -1px
+        border-top-right-radius 50px
+        border-bottom-right-radius 50px
+        line-height 46px
+        padding 0 50px
+        cursor pointer
+        &:focus
+          outline none
   .lista
     .list-title
       color #f43
@@ -277,6 +306,46 @@ export default {
             align-items center
             margin 0 -15px
             flex-wrap wrap
+            .event
+              flex-grow 1
+              flex-basis 300px
+              min-width 250px
+              max-width 380px
+              margin 0 15px 30px 15px
+              .date
+                font-size 12px
+                color #777
+                font-weight bold
+                .far
+                  margin-right 5px
+                  color #f43
+                span
+                  span
+                    margin 0 4px 0 0
+              .tags
+                .tag
+                  background #e06
+                  padding 2px 15px
+                  border-radius 10px
+                  margin 5px 0
+                  color #fff
+                  font-weight bold
+                  text-transform uppercase 
+                  display inline-block
+                  font-size 10px 
+              .image
+                img
+                  border-radius 10px
+                  width 100%
+              .headline
+                font-size 12px
+                text-transform uppercase
+                color #f43
+                margin 10px 0
+              .title
+                font-size 16px
+                color #444
+                margin 5px 0
     .sidebar
       flex 1
       min-width 300px
