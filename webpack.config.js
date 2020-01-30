@@ -27,7 +27,7 @@ let config = {
         })
     ],
     output: {
-        filename: '[name].[contenthash].js',
+        filename: '[name].' + (new Date).getDate() + '.js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {

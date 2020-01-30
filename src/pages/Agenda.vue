@@ -29,7 +29,7 @@
           .main
             .categories
               .category(v-for="category in categorias")
-                router-link.category-title(:to="'categoria/' + category.slug") {{category.name}}
+                router-link.category-title(:to="'/' + category.slug") {{category.name}}
                 hr
                 .carousel
                   .prev
@@ -90,7 +90,7 @@ export default {
 
     _getPosts(index) {
       var category = this.categorias[index]
-      this.$http.get('agenda?_embed&categoria[]=' + category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
+      this.$http.get('agenda?_embed&per_page=3&categoria[]=' + category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
       .then(resp => {
         Vue.set(category, 'posts', resp.data)
         console.log(resp)
