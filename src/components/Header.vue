@@ -1,19 +1,23 @@
 <template>
   <header id="header">
     <h1 @click="$router.push('/')">Vuegenda</h1>
-    <ul>
+    <ul :class="{active: showMenuMobile}">
       <li v-for="cat in categorias" :key="cat.name" :class="{active: $route.params.category == cat.slug}">
         <router-link :to="{path: '/' + cat.slug, params: {name: cat.name, id: cat.id}, meta: {title: cat.name}}">
           {{ cat.name }}
         </router-link>
       </li>
     </ul>
+    <div class="toggle" @click="showMenuMobile = !showMenuMobile">
+      <span class="fa fa-bars"></span>
+    </div>
   </header>
 </template>
 <script>
 export default {
   data() {
     return {
+      showMenuMobile: false,
       categorias: []
     }
   },
@@ -32,6 +36,12 @@ export default {
   color #fff
   justify-content space-between
   align-items center
+  .toggle
+    cursor pointer
+    display none
+    font-size 32px
+    color #fff
+    margin-right 20px
   h1
     flex 1
     margin 0
@@ -44,6 +54,7 @@ export default {
     margin 0 30px 0 0
     display flex
     align-items right
+    flex-wrap wrap
     li
       display flex
       flex 1
@@ -62,4 +73,44 @@ export default {
       a
         color #fff
         text-decoration none
+@media all and (max-width: 800px)
+  body
+    .content-main
+      padding-top 70px
+      position relative
+  #header
+    z-index 9
+    position fixed
+    top 0
+    left 0
+    width 100%
+    .toggle 
+      display flex
+    ul
+      position absolute
+      width 70%
+      background #111
+      height 100vh
+      left -80%
+      top 0
+      z-index 99
+      display block
+      transition 0.5s left
+      overflow hidden
+      &.active
+        width 80%
+        transition 0.5s left
+        left 0
+      li
+        padding 10px 0
+        text-align left
+        min-width 100%
+        a
+          width 100%
+          padding 0 15px
+        &.active
+          border none
+      li + li
+        margin-left 0
+
 </style>

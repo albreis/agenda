@@ -71,4 +71,9 @@ export default {
       cursor pointer
       &:focus
         outline none
+@media all and (max-width: 800px)
+  .search
+    form
+      button 
+        display none
 </style>
