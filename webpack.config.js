@@ -27,7 +27,7 @@ let config = {
         })
     ],
     output: {
-        filename: '[name].' + (new Date).getDate() + '.js',
+        filename: '[name].' + (new Date).getTime() + '.js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {
