@@ -6,6 +6,18 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 let config = {
     entry: './src/app.js',
+    devServer: {
+        contentBase: path.join(__dirname, 'www'),
+        compress: true,
+        port: 9000,
+        host: '127.0.0.1',
+        liveReload: false,
+        writeToDisk: false,
+        hot: true
+    },
+    resolve: {
+      extensions: ['.vue', '.tsx', '.ts', '.js', '.jsx', '.scss', '.styl', '.sass', '.jade', '.css', '.gif', '.png', '.jpg', '.jpeg', '.svg']
+    },
     plugins: [
         new VueLoaderPlugin(),
         new CleanWebpackPlugin(),
@@ -15,7 +27,7 @@ let config = {
         })
     ],
     output: {
-        filename: '[name].[hash].js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {
@@ -152,18 +164,6 @@ let config = {
               exclude: /index.html/
             }
         ]
-    },
-    devServer: {
-        contentBase: path.join(__dirname, 'www'),
-        compress: true,
-        port: 9000,
-        host: '127.0.0.1',
-        liveReload: false,
-        writeToDisk: false,
-        hot: true
-    },
-    resolve: {
-      extensions: ['.vue', '.tsx', '.ts', '.js', '.jsx', '.scss', '.styl', '.sass', '.jade', '.css', '.gif', '.png', '.jpg', '.jpeg', '.svg']
     }
 };
 
