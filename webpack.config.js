@@ -15,7 +15,7 @@ let config = {
         })
     ],
     output: {
-        filename: '[name].[contenthash].js',
+        filename: '[name].[hash].js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {

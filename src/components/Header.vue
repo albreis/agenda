@@ -14,6 +14,9 @@
   </header>
 </template>
 <script>
+
+import { EventBus } from '../event-bus.js';
+
 export default {
   data() {
     return {
@@ -22,6 +25,9 @@ export default {
     }
   },
   mounted() {
+
+    EventBus.$on('clickOnBody', () => { this.showMenuMobile = false})
+
     this.$http.get('categoria?_embed&__hide_empty=1')
       .then(res => {
         this.categorias = res.data

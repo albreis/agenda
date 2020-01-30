@@ -2,16 +2,25 @@
     <div class="content-main">
         <app-header></app-header>
         <!-- Renderiza a rota -->
-        <router-view :key="$route.fullPath"></router-view>
+        <div @click="clickOnBody">
+            <router-view :key="$route.fullPath"></router-view>
+        </div>
     </div>
 </template>
 <script>
 import Vue from 'vue'
 import Header from './components/Header.vue';
+import { EventBus } from './event-bus.js';
 
 export default {    
   components: {
     appHeader: Header
+  },
+
+  methods: {
+      clickOnBody() {
+          EventBus.$emit('clickOnBody')
+      }
   }
 }
 </script>
