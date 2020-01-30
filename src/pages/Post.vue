@@ -3,7 +3,6 @@
     .single-post(v-if="post")
       h1 {{post.title.rendered}}
       .post-content(v-html="post.content.rendered")
-
 </template>
 <script>
 export default {
@@ -14,7 +13,7 @@ export default {
   },
 
   mounted() {
-    this.$http.get('agenda?slug=' + this.$route.params.post)
+    this.$http.get('agenda?_embed&slug=' + this.$route.params.post)
       .then(res => {
         this.post = res.data[0]
       })

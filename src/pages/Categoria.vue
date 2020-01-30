@@ -1,11 +1,7 @@
 <template lang="pug">
   div
     .agenda
-      .search
-        form
-          .fa.fa-search  
-          input(type="search" v-model="s" placeholder="Nome do evento ou local")
-          button(type="button") Encontrar
+      app-search
       .lista
         .container
           h3.list-title 
@@ -48,11 +44,13 @@
 <script>
 import Vue from 'vue';
 import GridItem from '../components/GridItem.vue';
+import Search from '../components/Search.vue';
 
 export default {
 
   components: {
-    gridItem: GridItem
+    gridItem: GridItem,
+    appSearch: Search
   },
 
   data() {
