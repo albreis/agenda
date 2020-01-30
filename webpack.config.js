@@ -1,12 +1,21 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 
 let config = {
     entry: './src/app.js',
+    plugins: [
+        new VueLoaderPlugin(),
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            minify: false
+        })
+    ],
     output: {
-        filename: 'bundle.js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {
@@ -144,13 +153,6 @@ let config = {
             }
         ]
     },
-    plugins: [
-        new VueLoaderPlugin(),
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            minify: false
-        })
-    ],
     devServer: {
         contentBase: path.join(__dirname, 'www'),
         compress: true,
