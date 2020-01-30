@@ -157,7 +157,7 @@ let config = {
         port: 9000,
         host: '127.0.0.1',
         liveReload: false,
-        writeToDisk: true,
+        writeToDisk: false,
         hot: true
     },
     resolve: {
