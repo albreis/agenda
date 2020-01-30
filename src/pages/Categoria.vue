@@ -38,6 +38,7 @@
                     grid-item(v-for="post in posts" :item="post" :category="category")
                   .next
                     .fa.fa-chevron-right
+              .load-more(@click="loadMore" v-if="!hideLoadMore") Mais eventos
             .sidebar(v-if="0")
               | sidebar
 </template>
@@ -57,8 +58,9 @@ export default {
     return {
       category: {},
       posts: [],
-      page: 0,
+      page: 1,
       week: 0,
+      hideLoadMore: false,
       visibleDays: 7,
       activeDay: false,
       week_days: [],
@@ -92,14 +94,22 @@ export default {
   
   methods: {
 
+    loadMore() {
+      this.page++
+      this.getPosts()
+    },
+
     getPosts() {
       
       if(!this.category.id) return;
 
-      this.$http.get('agenda?_embed&categoria[]=' + this.category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
+      this.$http.get('agenda?_embed&per_page=9&page=' + this.page + '&categoria[]=' + this.category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
       .then(resp => {
-        this.posts = resp.data
-        this.page = 0
+        //this.posts = resp.data
+        for(var i in resp.data) {
+          this.posts.unshift(resp.data[i])
+        }
+        this.hideLoadMore = resp.data.length < 3
         console.log(resp)
         //this.categorias.push(this.categorias[i])
       })
@@ -140,6 +150,14 @@ export default {
 </script>
 <style scoped lang="stylus">
 .agenda
+  .load-more
+    padding 10px 30px
+    color #fff;
+    background #f43
+    display table
+    margin 30px auto
+    cursor pointer
+    border-radius 30px
   .search
     display flex
     justify-content center
