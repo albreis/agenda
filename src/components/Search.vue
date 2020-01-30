@@ -1,9 +1,9 @@
 <template lang="pug">
   .search
-        form
+        form(@submit="search")
           .fa.fa-search  
           input(type="search" v-model="s" placeholder="Nome do evento ou local")
-          button(@click="search" type="button") Encontrar
+          button(type="submit") Encontrar
 </template>
 <script>
 export default {
@@ -20,6 +20,7 @@ export default {
   methods: {
     search(){
       this.$router.push({path: `/pesquisar?s=${this.s}`, props: (route) => ({ query: route.query.s })})
+      return false;
     }
   }
 }

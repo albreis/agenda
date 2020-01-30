@@ -88,7 +88,7 @@ export default {
   methods: {
 
     getPosts() {      
-      this.$http.get('agenda?_embed&s=' + this.s + '&dia_de_inicio=' + this.activeDay.valueOf())
+      this.$http.get('agenda?_embed&search=' + this.s + '&dia_de_inicio=' + this.activeDay.valueOf())
       .then(resp => {
         this.posts = resp.data
     console.log('route', this.posts[0])
