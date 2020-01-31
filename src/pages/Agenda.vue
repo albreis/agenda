@@ -18,7 +18,7 @@
             .days-carousel
               .prev(@click="prev")
                 .fa.fa-angle-left
-              .days
+              .days(:class="{animating: animating}")
                 .day(v-for="day in week_days" :class="{active: day==activeDay}" @click="activeDay=day")
                   .day-name {{days[day.getDay()].substr(0, 3)}}
                   .day-number {{day.getDate()}}
@@ -28,7 +28,7 @@
             img(src="https://via.placeholder.com/100x100").logo
           .main
             .categories
-              .category(v-for="category in categorias")
+              .category(v-for="category in categorias" v-if="category.posts.length")
                 router-link.category-title(:to="'/' + category.slug") {{category.name}}
                 hr
                 .carousel
@@ -67,6 +67,7 @@ export default {
 
   data() {
     return {
+      animating: false,
       categorias: [],
       posts: [],
       week: 0,
@@ -113,8 +114,10 @@ export default {
     },
 
     getWeek() {
+      var app = this
       this.week_days = []
       this.activeDay = false
+      this.animating = true
       for(var d = 0; d < this.visibleDays; d++) {
         var date = new Date(this.curr_date);
         if(this.activeDay===false) {
@@ -124,6 +127,9 @@ export default {
         this.week_days.push(date)
       }
       console.log(this.curr_date)
+      setTimeout(function(){
+        app.animating = false
+      }, 1000)
     },
 
     next() {
@@ -203,6 +209,10 @@ export default {
         .days
           display flex
           justify-content center
+          &.animating
+            .day
+              transition transform 1s
+              transform rotateY(360deg)
           .day
             flex 1
             cursor pointer
