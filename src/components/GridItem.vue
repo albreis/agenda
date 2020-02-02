@@ -1,30 +1,38 @@
 <template lang="pug">
-router-link.event(:to="`${item._embedded['wp:term'][0][0].slug}/${item.slug}`")
-  .date
-    .far.fa-clock
-    span 
-      span(v-if="item.acf.dia_de_inicio") De {{item.acf.dia_de_inicio}}
-      span(v-if="item.acf.hora_de_inicio") - {{item.acf.hora_de_inicio}}
-      span(v-if="item.acf.dia_de_termino") a {{item.acf.dia_de_termino}}
-      span(v-if="item.acf.hora_de_termino") - {{item.acf.hora_de_termino}}
-  .tags(v-if="item._embedded")
-    .tag(v-for="tag in item._embedded['wp:term']" v-if="tag[0].taxonomy=='tipos'") {{tag[0].name}}
+router-link.event(:to="`${item.categories[0].slug}/${item.slug}`")
   .image(v-if="getImage(item)")
     img(:src="getImage(item)")
-  h4.headline {{item.acf.headline}}
-  h3.title {{item.title.rendered}}
+  .footer
+    .date
+      .far.fa-clock
+      span 
+        span(v-if="item.acf.datas[0].dia") 
+          span(v-if="item.acf.datas.length > 1") De
+          span(v-else) Dia
+          span {{item.acf.datas[0].dia}}
+          span(v-if="item.acf.datas[0].hora_de_inicio") as {{item.acf.datas[0].hora_de_inicio}}
+        span(v-if="item.acf.datas.length > 1")
+          span até {{item.acf.datas[item.acf.datas.length - 1].dia}}
+          span(v-if="item.acf.datas[item.acf.datas.length - 1].hora_de_termino") 
+            span as {{item.acf.datas[item.acf.datas.length - 1].hora_de_termino}}
+    h3.title 
+      strong {{item.title.rendered}}
+    h4.headline 
+      span(v-if="item.acf.endereco.cidade") {{item.acf.endereco.cidade}}
+      span(v-if="item.acf.endereco.estado") - {{item.acf.endereco.estado}}
+    .tags(v-if="item.tags")
+      .tag(v-for="tag in item.tags") {{tag.name}}
 </template>
 <script>
 export default {
-  props: ['item', 'category'],
+  props: ['item'],
 
   methods: {
     getImage(item) {
-      var img = item._embedded['wp:featuredmedia'][0].media_details;
-      if(img) {
-        return img.sizes.medium.source_url;
+      if(item.images.medium) {
+        return item.images.medium;
       }
-      return 'https://via.placeholder.com/388x214';
+      return 'https://via.placeholder.com/300x200';
     }
   }
 }
@@ -36,10 +44,16 @@ export default {
   min-width 250px
   max-width 380px
   margin 0 15px 30px 15px
+  text-align center
+  box-shadow 0 0 5px rgba(0,0,0,0.2)
+  border-radius 10px
+  .footer
+    padding 10px
   .date
     font-size 12px
     color #777
     font-weight bold
+    margin-bottom 5px
     .far
       margin-right 5px
       color #f43
@@ -48,11 +62,11 @@ export default {
         margin 0 4px 0 0
   .tags
     .tag
-      background #e06
+      background #ccc
       padding 2px 15px
       border-radius 10px
-      margin 5px 0
-      color #fff
+      margin 5px 5px 5px 0
+      color #666
       font-weight bold
       text-transform uppercase 
       display inline-block
@@ -62,12 +76,12 @@ export default {
       border-radius 10px
       width 100%
   .headline
-    font-size 12px
+    font-size 10px
     text-transform uppercase
-    color #f43
-    margin 10px 0
-  .title
-    font-size 16px
-    color #444
     margin 5px 0
+  .title
+    font-size 18px
+    color #f43
+    margin 5px 0
+    font-weight 600
 </style>

@@ -8,6 +8,14 @@
         </router-link>
       </li>
     </ul>
+    <div class="location">
+      <span class="fa fa-map-marker-alt"></span> 
+      <span class="current-location">{{location.label}} </span>
+      <!-- <span class="fa fa-chevron-down"></span> -->
+    </div>
+    <div class="user-menu">
+      <span class="fa fa-user"></span> 
+    </div>
     <div class="toggle" @click="showMenuMobile = !showMenuMobile">
       <span class="fa fa-bars"></span>
     </div>
@@ -21,6 +29,10 @@ export default {
   data() {
     return {
       showMenuMobile: false,
+      location: {
+        label: 'Todas as cidades',
+        value:''
+      },
       categorias: []
     }
   },
@@ -48,6 +60,27 @@ export default {
   color #fff
   justify-content space-between
   align-items center
+  .location
+    margin-right 30px
+    padding 8px 15px
+    border 1px solid #fff
+    border-radius 5px
+
+    .fa
+      font-size 20px
+    .current-location 
+      padding 0 5px
+      font-size 14px
+      font-weight bold
+  .user-menu
+    margin-right 30px
+    border-radius 100px
+    border 2px solid #fff
+    width 40px
+    height 40px
+    line-height 34px
+    text-align center
+    font-size 24px
   .toggle
     cursor pointer
     display none
@@ -60,7 +93,7 @@ export default {
     padding 15px
     cursor pointer
   ul
-    flex 2
+    flex 3
     list-style none
     padding 0
     margin 0 30px 0 0
@@ -75,10 +108,11 @@ export default {
       line-height 26px
       border-bottom 5px solid transparent
       font-weight bold
+      font-size 16px
       &+li
-        margin-left 30px
+        margin-left 20px
       &.active
-        border-bottom 5px solid #fff
+        border-bottom 2px solid #fff
         font-weight bold
         a
           color #f5f500

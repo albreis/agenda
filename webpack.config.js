@@ -10,7 +10,7 @@ let config = {
         contentBase: path.join(__dirname, 'www'),
         compress: true,
         port: 9000,
-        host: '127.0.0.1',
+        host: '192.168.218.241',
         liveReload: false,
         writeToDisk: false,
         hot: true
@@ -27,7 +27,7 @@ let config = {
         })
     ],
     output: {
-        filename: '[name].' + (new Date).getTime() + '.js',
+        filename: '[name].[hash].' + (new Date).getTime() + '.js',
         path: path.resolve(__dirname, 'www'),
     },
     module: {

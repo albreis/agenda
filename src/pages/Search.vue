@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    .agenda
+    .eventos
       app-search
       .lista
         .container
@@ -88,7 +88,7 @@ export default {
   methods: {
 
     getPosts() {      
-      this.$http.get('agenda?_embed&search=' + this.s + '&dia_de_inicio=' + this.activeDay.valueOf())
+      this.$http.get('eventos?_embed&search=' + this.s + '&dia=' + this.activeDay.valueOf())
       .then(resp => {
         this.posts = resp.data
     console.log('route', this.posts[0])
@@ -129,7 +129,7 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
-.agenda
+.eventos
   .search
     display flex
     justify-content center
@@ -351,7 +351,7 @@ export default {
       min-width 300px
       padding 15px
 @media all and (max-width: 800px)
-  .agenda 
+  .eventos 
     .main
       padding 15px
     .search

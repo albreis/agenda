@@ -13,7 +13,7 @@ export default {
   },
 
   mounted() {
-    this.$http.get('agenda?_embed&slug=' + this.$route.params.post)
+    this.$http.get('eventos?_embed&slug=' + this.$route.params.post)
       .then(res => {
         this.post = res.data[0]
       })

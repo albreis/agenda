@@ -5,6 +5,7 @@ import axios from './Request.js';
 import router from './routes.js';
 
 Vue.prototype.$http = axios
+Vue.prototype.$categories = []
 
 Date.prototype.addDays = function(days) {
   this.setDate(this.getDate()+days);

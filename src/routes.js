@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Agenda from './pages/Agenda.vue';
+import Eventos from './pages/Eventos.vue';
 import Categoria from './pages/Categoria.vue';
 import Post from './pages/Post.vue';
 import Search from './pages/Search.vue';
+import Ingresso from './pages/Ingresso.vue';
 import VueAnalytics from 'vue-analytics'
 
 Vue.use(Router);
@@ -11,7 +12,8 @@ Vue.use(Router);
 
 
 const routes = [
-  { path: '/', component: Agenda},
+  { path: '/', component: Eventos},
+  { path: '/ingresso', component: Ingresso },
   { path: '/pesquisar', component: Search },
   { path: '/:category', component: Categoria },
   { path: '/:category/:post', component: Post }

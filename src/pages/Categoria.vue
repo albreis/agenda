@@ -1,34 +1,16 @@
 <template lang="pug">
   div
-    .agenda
+    .eventos
       app-search
       .lista
         .container
           h3.list-title 
             .fa.fa-calendar-alt
             | Eventos do dia
-          .daybar
-            .now
-              .day-number {{now.getDate()}}
-              .day-text
-                .day-name {{days[now.getDay()]}}
-                .day-my 
-                  span {{months[now.getMonth()]}} 
-                  span {{now.getYear().toString().substr(1, 2)}}
-            .days-carousel
-              .prev(@click="prev")
-                .fa.fa-angle-left
-              .days
-                .day(v-for="day in week_days" :class="{active: day==activeDay}" @click="activeDay=day")
-                  .day-name {{days[day.getDay()].substr(0, 3)}}
-                  .day-number {{day.getDate()}}
-                  .month {{months[day.getMonth()]}}
-              .next(@click="next")
-                .fa.fa-angle-right
-            img(src="https://via.placeholder.com/100x100").logo
+          app-days-bar
           .main
             .categories
-              .category(v-if="category")
+              .category(v-if="category && posts.length")
                 router-link.category-title(:to="category.slug") {{category.name}}
                 hr
                 .carousel
@@ -46,10 +28,13 @@
 import Vue from 'vue';
 import GridItem from '../components/GridItem.vue';
 import Search from '../components/Search.vue';
+import DaysBar from '../components/DaysBar.vue';
+import { EventBus } from '../event-bus.js';
 
 export default {
 
   components: {
+    appDaysBar: DaysBar,
     gridItem: GridItem,
     appSearch: Search
   },
@@ -58,98 +43,71 @@ export default {
     return {
       category: {},
       posts: [],
-      page: 1,
-      week: 0,
       hideLoadMore: false,
-      visibleDays: 7,
-      activeDay: false,
-      week_days: [],
-      days: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-      months: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-      s: '',
-      now: new Date,
-      curr_date: new Date,
-      selectedDate: new Date
+      activeDay: new Date,
+      page: 1
     }
   },
 
   mounted(){
-    console.log('route', this.$route)
-    if(window.innerWidth < 800) {
-      this.visibleDays = 1
-    }
     
-      console.log('category', this.$route)
-    this.$http.get('categoria?slug=' + this.$route.params.category)
-    .then(resp => {
+    EventBus.$on('changeDate', (date) => {
+      this.activeDay = date
+    });
+
+    this.$http.get('categoria', {
+      params: {
+        slug: this.$route.params.category
+      }
+    }).then(resp => {
       this.category = resp.data[0]
-      console.log('category', resp)
-      //this.categorias.push(this.categorias[i])
       this.getPosts()
     })
-
-    this.getWeek()
 
   },
   
   methods: {
+
+    getPosts() {
+      
+      if(!this.category.id) return;
+
+
+      this.$http.get('eventos', {
+        params: {
+          _embed: true,
+          per_page: 9,
+          page: this.page,
+          categoria: [this.category.id],
+          dia: this.activeDay.valueOf()
+        }
+      }).then(resp => {
+        //this.posts = resp.data
+        for(var i in resp.data) {
+          this.posts.unshift(resp.data[i])
+        }
+        this.hideLoadMore = resp.data.length < 3;
+      })
+    },
 
     loadMore() {
       this.page++
       this.getPosts()
     },
 
-    getPosts() {
-      
-      if(!this.category.id) return;
-
-      this.$http.get('agenda?_embed&per_page=9&page=' + this.page + '&categoria[]=' + this.category.id + '&dia_de_inicio=' + this.activeDay.valueOf())
-      .then(resp => {
-        //this.posts = resp.data
-        for(var i in resp.data) {
-          this.posts.unshift(resp.data[i])
-        }
-        this.hideLoadMore = resp.data.length < 3
-        console.log(resp)
-        //this.categorias.push(this.categorias[i])
-      })
-    },
-
-    getWeek() {
-      this.week_days = []
-      this.activeDay = false
-      for(var d = 0; d < this.visibleDays; d++) {
-        var date = new Date(this.curr_date);
-        if(this.activeDay===false) {
-          this.activeDay = date
-        }
-        date.setDate(date.getDate() + d);
-        this.week_days.push(date)
-      }
-      console.log(this.curr_date)
-    },
-
-    next() {
-      this.curr_date = this.curr_date.addDays(this.visibleDays)
-      this.getWeek()
-    },
-
-    prev() {
-      this.curr_date = this.curr_date.subDays(this.visibleDays)
-      this.getWeek()
-    }
   },
-
+  
   watch: {
     activeDay() {
+      this.posts = []
+      this.page = 1
       this.getPosts()
     }
-
   }
 }
 </script>
 <style scoped lang="stylus">
-.agenda
+.eventos
   .load-more
     padding 10px 30px
     color #fff;
@@ -379,7 +337,7 @@ export default {
       min-width 300px
       padding 15px
 @media all and (max-width: 800px)
-  .agenda 
+  .eventos 
     .main
       padding 15px
     .search
