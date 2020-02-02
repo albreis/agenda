@@ -65,7 +65,6 @@ export default {
     padding 8px 15px
     border 1px solid #fff
     border-radius 5px
-
     .fa
       font-size 20px
     .current-location 

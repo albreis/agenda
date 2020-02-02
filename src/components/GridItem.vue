@@ -18,8 +18,11 @@ router-link.event(:to="`${item.categories[0].slug}/${item.slug}`")
     h3.title 
       strong {{item.title.rendered}}
     h4.headline 
-      span(v-if="item.acf.endereco.cidade") {{item.acf.endereco.cidade}}
-      span(v-if="item.acf.endereco.estado") - {{item.acf.endereco.estado}}
+      span(v-if="item.acf.endereco.cidade") {{item.acf.endereco.cidade}} 
+      span(v-if="item.acf.endereco.estado") 
+        .fa.fa-map-marker-alt
+        | &nbsp;
+        span {{item.acf.endereco.estado}}
     .tags(v-if="item.tags")
       .tag(v-for="tag in item.tags") {{tag.name}}
 </template>
@@ -37,7 +40,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
 .event
   flex-grow 1
   flex-basis 300px
@@ -77,6 +80,7 @@ export default {
       width 100%
   .headline
     font-size 10px
+    color #444
     text-transform uppercase
     margin 5px 0
   .title

@@ -11,7 +11,6 @@
           .main
             .categories
               .category
-                hr
                 .carousel
                   .prev
                     .fa.fa-chevron-left
@@ -142,24 +141,6 @@ export default {
   .eventos 
     .main
       padding 15px
-    .search
-      padding-left 15px
-      padding-right 15px
-      form
-        &:before
-          content 'Pesquisar'
-          display block
-          color #f43
-          text-transform uppercase
-          font-size 16px
-          font-weight bold
-          position absolute
-          top -25px
-          left 0
-          text-align center
-          width 100%
-        button
-          display none
     .lista 
       .list-title
         text-align center
