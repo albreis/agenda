@@ -24,21 +24,59 @@
         div(v-html="post.content.rendered")
       .toggle-content(@click="showFullContent=!showFullContent")
         span.fa(:class="{'fa-chevron-up': showFullContent, 'fa-chevron-down': !showFullContent}")
+  .ingressos
+    .datas
+      .data(v-for="data in post.acf.datas")
+        strong.dia {{getDateFormated(data.dia).dia}}
+        .mes-ano
+          strong.mes {{getDateFormated(data.dia).mes}}
+          span de
+          strong.ano {{getDateFormated(data.dia).ano}}
+        .horario
+          span.de(v-if="data.hora_de_inicio && data.hora_de_termino") De
+          span.hora_inicio(v-if="data.hora_de_inicio") {{data.hora_de_inicio}}
+          span.as(v-if="data.hora_de_inicio && data.hora_de_termino") as
+          span.hora_termino(v-if="data.hora_de_termino") {{data.hora_de_termino}}
 </template>
 <script>
 export default {
   data() {
     return {
       showFullContent: false,
-      post: ''
+      post: '',
+      meses: {
+        '01': 'Janeiro',
+        '02': 'Fevereiro',
+        '03': 'Março',
+        '04': 'Abril',
+        '05': 'Maio',
+        '06': 'Junho',
+        '07': 'Julho',
+        '08': 'Agosto',
+        '09': 'Setembro',
+        '10': 'Outubro',
+        '11': 'Novembro',
+        '12': 'Dezembro'
+      }
     }
   },
 
   mounted() {
-    this.$http.get('eventos?_embed&slug=' + this.$route.params.post)
+    this.$http.get('eventos?slug=' + this.$route.params.post)
       .then(res => {
         this.post = res.data[0]
       })
+  },
+
+  methods: {
+    getDateFormated(data) {
+      var d = data.split('/')
+      return {
+        dia: d[0],
+        mes: this.meses[d[1]].substr(0,3),
+        ano: d[2]
+      }
+    }
   }
 }
 </script>
@@ -83,8 +121,8 @@ export default {
             margin 30px 0 10px 0
           .cidade-estado
             font-size 14px
+            font-style normal
             .fa
-              transform skewX(-15deg)
               color #f43
   .toggle-content
     z-index 2
@@ -111,4 +149,24 @@ export default {
       padding-bottom 60px
       .toggle-content
         margin-top 0
+  .ingressos
+    .datas
+      display flex
+      .data
+        flex 1
+        padding 15px 0
+        background #f43
+        color #fff
+        text-align center
+        margin 1px
+        .dia
+          font-size 40px
+        .mes-ano
+          font-size 11px
+          span
+            margin 0 3px
+        .horario
+          font-size 11px
+          span
+            margin 0 3px
 </style>
