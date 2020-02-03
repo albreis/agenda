@@ -61,13 +61,44 @@ import Vue from 'vue';
 export default {
   data() {
     return {
+      /**
+       * Data selecionada
+       */
       dateSelected: '',
+
+      /**
+       * Setor selecionado
+       */
       setorSelected: '',
+
+      /**
+       * Entrada selecionada
+       */
       entradaSelected: '',
+
+      /**
+       * Reserva selecionada
+       */
       reservaSelected: '',
+
+      /**
+       * Dados do checkout
+       */
       checkout: {},
+
+      /**
+       * Mostrar contetudo completo?
+       */
       showFullContent: false,
+
+      /**
+       * Post
+       */
       post: '',
+
+      /**
+       * Nomes dos meses
+       */
       meses: {
         '01': 'Janeiro',
         '02': 'Fevereiro',
@@ -87,36 +118,90 @@ export default {
 
   mounted() {
 
+    /**
+     * Verifica-se se existem dados de checkout na seção
+     * para se caso a pessoa tenha dado refresh na página
+     */
     if(sessionStorage.checkout) {
         this.checkout = JSON.parse(sessionStorage.checkout)
     }
 
+    /**
+     * Faz a chama a API para buscar dados do Post
+     */
     this.$http.get('eventos',{params: {slug: this.$route.params.post}})
       .then(res => {
+        /**
+         * Define o post
+         */
         this.post = res.data[0]
+
+        /**
+         * Adiciona o post no checkout para ser recuperado na finalização
+         * da compra
+         * 
+         * Obs.: Usar Vue.set garante que o objeto manterá sua propriedade reativa
+         */
         Vue.set(this.checkout, this.post.id, this.post);
+
+        /**
+         * Inicializa o atributo "datas" dentro do item
+         * do checkout para inserir as datas selecionadas
+         */
         Vue.set(this.checkout[this.post.id], 'datas', {});
       })
   },
 
   watch: {
+    /**
+     * Observa a mudança da data selecionada
+     */
     dateSelected() {
+      /**
+       * Ao alterar a data é necessário limpar os atributos:
+       */
       this.setorSelected = ''
       this.entradaSelected = ''
       this.reservaSelected = ''
     },
     
+    /**
+     * Observa mudança de setor
+     */
     setorSelected() {
+      /**
+       * Ao alterar o setor precisa limpar os atributos:
+       */
       this.entradaSelected = ''
       this.reservaSelected = ''
     },
     
+    /**
+     * Observa mudança do tipo de entrada
+     */
     entradaSelected() {
+      /**
+       * Ao alterar a entrada precisa limpar a reserva selecionada.
+       * Apenas em checkout onde seja necessário selecionar poltrona, mesa, etc
+       */
       this.reservaSelected = ''
     },
 
+    /**
+     * Observa qualquer alteração nos dados do checkout
+     * A opção "deep" faz com que sejam observadas alterações
+     * em todos os níveis do objeto
+     */
     checkout:{
+      /**
+       * Função responsável pela manipulação das observações
+       */
       handler: function() {
+        /**
+         * Atualiza sessioStorage com os novos dados.
+         * O objeto "checkout" é transformado em string usando
+         * JSON.stringify
+         */
         sessionStorage.checkout = JSON.stringify(this.checkout)
       },
       deep: true
@@ -124,39 +209,119 @@ export default {
   },
 
   methods: {
+
+    /**
+     * Seleciona a data
+     */
     selectDate(date) {
+      /**
+       * Define a data selecionada
+       */
       this.dateSelected = date
+
+      /**
+       * Se a data ainda não existe no checkout é adicionada
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia]) 
         Vue.set(this.checkout[this.post.id].datas, this.dateSelected.dia, date)
+
+      /**
+       * Inicializa o atributo "setores" para essa data no checkout.
+       * Esse atributo receberá dados dos setores que formos selecionando
+       * para comprarmos ingressos
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores) 
         Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia], 'setores', {})
     },
 
+    /**
+     * Seleciona o setor
+     */
     selectSetor(setor) {
+      /**
+       * Define o setor selecionado atualmente
+       */
       this.setorSelected = setor
+
+      /**
+       * Verifica se o setor selecionado já existe dentro do atributo "setores"
+       * da data selecionada. Caso não exista ele é adicionado.
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome])
         Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores, this.setorSelected.nome, setor)
+
+      /**
+       * Cada setor dentro do checkout possui "reservas".
+       * Essas "reservas" podem ser um numero referente a um tipo de ingresso.
+       * Ou pode ter também um código referente a um assento de teatro por exemplo.
+       * 
+       * Se o atributo "reservas" não estiver inicializado para esse setor
+       * ele será criado.
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas)
         Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome], 'reservas', {})
     },
 
+    /**
+     * Seleciona entrada
+     */
     selectEntrada(entrada) {
+      /**
+       * Define a entrada selecionada atualmente
+       */
       this.entradaSelected = entrada
+
+      /**
+       * Se a entrada não existe no atributo "reservas" do setor selecionado
+       * será adicionada
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome])
         Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas, this.entradaSelected.nome, entrada)
+      
+      /**
+       * As reservas possuem 2 atributos: 
+       * qty = quantidade reservada
+       * code = código da reserva (para assentos de teatro, etc)
+       * 
+       * Para venda de ingressos onde não se escolhe numero de poltrona, mesa, etc
+       * só é necessário o atributo "qty".
+       * 
+       * Poltronas de teatro por exemplo irão ter o atributo "code" com o código da poltrona
+       * e qty com o valor 1 (já é uma poltrona é para uma pessoa)
+       * 
+       * Ingressos para show onde não precisa-se reservar mesas, cadeiras, etc
+       * ficarão com o atributo "code" em branco e podem ter o atributo "qty" com qualquer valor
+       *
+       * Obs.: os valores variam de acordo com as configurações do evento, 
+       * podendo haver mínimo e máximo
+       */
       if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome].quantidade)
         Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome], 'quantidade', {qty: 0, code: ''})
     },
 
+    /**
+     * Verifica se o setor está disponível na data atual
+     */
     checkDate(setor) {
       var datas = setor.setor_disponivel_nas_datas;
       var i;
       for(i in datas) {
-        if(datas[i].value == this.checkout[this.post.id].datas[this.dateSelected.dia].dia) return true;
+        /**
+         * Se o setor estiver disponível retorna "true" e para a execução
+         */
+        if(datas[i].value == this.checkout[this.post.id].datas[this.dateSelected.dia].dia) 
+          return true;
       }
+
+      /**
+       * Senão retorna "false"
+       */
       return false;
     },
 
+    /**
+     * Retorna a data dividida em componentes: dia, mes e ano
+     */
     getDateFormated(data) {
       var d = data.split('/')
       return {
