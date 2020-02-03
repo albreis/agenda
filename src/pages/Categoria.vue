@@ -11,7 +11,6 @@
           .main
             .categories
               .category(v-if="category && posts.length")
-                router-link.category-title(:to="category.slug") {{category.name}}
                 .carousel
                   .prev
                     .fa.fa-chevron-left

@@ -26,7 +26,7 @@
         span.fa(:class="{'fa-chevron-up': showFullContent, 'fa-chevron-down': !showFullContent}")
   .ingressos
     .datas
-      .data(v-for="data in post.acf.datas")
+      .data(v-for="data in post.acf.datas" @click="selectDate(data)" :class="{active: dateSelected==data}")
         strong.dia {{getDateFormated(data.dia).dia}}
         .mes-ano
           strong.mes {{getDateFormated(data.dia).mes}}
@@ -37,11 +37,35 @@
           span.hora_inicio(v-if="data.hora_de_inicio") {{data.hora_de_inicio}}
           span.as(v-if="data.hora_de_inicio && data.hora_de_termino") as
           span.hora_termino(v-if="data.hora_de_termino") {{data.hora_de_termino}}
+    .setores(v-if="dateSelected")
+      .container
+        .left
+          .list-setores(v-if="!setorSelected")
+            h2(v-if="checkDate(setorSelected)") Selecione o Setor
+            .setor(v-for="setor in post.acf.setores" @click="selectSetor(setor)" :class="{active: setorSelected == setor}" v-if="checkDate(setor)")
+              h3 {{setor.nome}}
+          .list-entradas(v-if="setorSelected")
+            button(@click="setorSelected=''")
+              .fa.fa-chevron-left
+              span Alterar setor
+            h2 Selecione o tipo de entrada
+            .entradas
+              .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
+                h3 {{entrada.nome}}
+                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome].reservas[entrada.nome].quantidade.qty" type="text")
+        .right(v-if="setorSelected.aceita_reservar_loca")
 </template>
 <script>
+import Vue from 'vue';
+
 export default {
   data() {
     return {
+      dateSelected: '',
+      setorSelected: '',
+      entradaSelected: '',
+      reservaSelected: '',
+      checkout: {},
       showFullContent: false,
       post: '',
       meses: {
@@ -62,13 +86,77 @@ export default {
   },
 
   mounted() {
-    this.$http.get('eventos?slug=' + this.$route.params.post)
+
+    if(sessionStorage.checkout) {
+        this.checkout = JSON.parse(sessionStorage.checkout)
+    }
+
+    this.$http.get('eventos',{params: {slug: this.$route.params.post}})
       .then(res => {
         this.post = res.data[0]
+        Vue.set(this.checkout, this.post.id, this.post);
+        Vue.set(this.checkout[this.post.id], 'datas', {});
       })
   },
 
+  watch: {
+    dateSelected() {
+      this.setorSelected = ''
+      this.entradaSelected = ''
+      this.reservaSelected = ''
+    },
+    
+    setorSelected() {
+      this.entradaSelected = ''
+      this.reservaSelected = ''
+    },
+    
+    entradaSelected() {
+      this.reservaSelected = ''
+    },
+
+    checkout:{
+      handler: function() {
+        sessionStorage.checkout = JSON.stringify(this.checkout)
+      },
+      deep: true
+    }
+  },
+
   methods: {
+    selectDate(date) {
+      this.dateSelected = date
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia]) 
+        Vue.set(this.checkout[this.post.id].datas, this.dateSelected.dia, date)
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores) 
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia], 'setores', {})
+    },
+
+    selectSetor(setor) {
+      this.setorSelected = setor
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome])
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores, this.setorSelected.nome, setor)
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas)
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome], 'reservas', {})
+    },
+
+    selectEntrada(entrada) {
+      this.entradaSelected = entrada
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome])
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas, this.entradaSelected.nome, entrada)
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome].quantidade)
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome], 'quantidade', {qty: 0, code: ''})
+    },
+
+    checkDate(setor) {
+      var datas = setor.setor_disponivel_nas_datas;
+      var i;
+      for(i in datas) {
+        if(datas[i].value == this.checkout[this.post.id].datas[this.dateSelected.dia].dia) return true;
+      }
+      return false;
+    },
+
     getDateFormated(data) {
       var d = data.split('/')
       return {
@@ -82,6 +170,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .post-page
+  padding-bottom 300px
   .page-header
     background #efefef
   .single-post
@@ -159,6 +248,10 @@ export default {
         color #fff
         text-align center
         margin 1px
+        cursor pointer
+        &.active
+          color #f43
+          background #fff
         .dia
           font-size 40px
         .mes-ano
@@ -169,4 +262,40 @@ export default {
           font-size 11px
           span
             margin 0 3px
+    .list-setores
+      .setor
+        padding 30px
+        background #efefef
+        margin 10px 0
+        cursor pointer
+        h3
+          margin 0
+    .list-entradas
+      button
+        padding 10px 15px
+        border none
+        background #444
+        color #fff
+        text-transform uppercase
+        margin-top 30px
+        .fa
+          margin-right 10px
+      .entradas
+        display flex
+        justify-content space-between
+        .entrada
+          padding 15px
+          margin 10px 0
+          background #efefef
+          cursor pointer
+          display flex
+          flex 1
+          max-width 45%
+          h3
+            flex 1
+            margin 0
+          input
+            flex 1
+            text-align center
+            max-width 50px
 </style>
