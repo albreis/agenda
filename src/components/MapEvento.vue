@@ -4,6 +4,30 @@
   </div>
 </template>
 <script>
+fabric.Canvas.prototype.getItemsByName = function(name) {
+  var objectList = [],
+      objects = this.getObjects();
+
+  for (var i = 0, len = this.size(); i < len; i++) {
+    if (objects[i].get('name') && objects[i].get('name') === name) {
+      objectList.push(objects[i]);
+    }
+  }
+
+  return objectList;
+};
+/**
+ * Item name is unique
+ */
+fabric.Canvas.prototype.getItemByName = function(name) {
+  var objects = this.getObjects();
+  for (var i = 0, len = this.size(); i < len; i++) {
+    if (objects[i].get('name') && objects[i].get('name') === name) {
+      return objects[i];
+    }
+  }
+  return false;
+};
 import Vue from 'vue'
 import { EventBus } from '../event-bus.js';
 export default {
@@ -24,6 +48,25 @@ export default {
       defaultCursor: true,
       stopContextMenu: true
     });
+
+    EventBus.$on('setHov', function(setor){
+      var object = app.canvas.getItemByName(setor);
+      if(typeof object.set == 'function') {
+        object.set('fill', 'red')
+        app.canvas.renderAll()
+      }
+      EventBus.$emit('setorHovered', setor)
+    })
+
+    EventBus.$on('setOut', function(setor){
+      var object = app.canvas.getItemByName(setor);
+      if(typeof object.set == 'function') {
+        object.set('fill', 'yellow')
+        app.canvas.renderAll()
+      }
+      EventBus.$emit('setorHovered', '')
+    })
+
     window.addEventListener('keydown', (e) => {
       if(e.keyCode == 46) {        
         var object = app.canvas.getActiveObject()

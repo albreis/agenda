@@ -42,7 +42,7 @@
         .left
           .list-setores(v-if="!setorSelected")
             h2 Selecione o Setor
-            .setor(v-for="setor in post.acf.setores" @click="selectSetor(setor)" :class="{active: setorSelected == setor, selected: setorSelected == setor, hovered: setorHovered == setor.nome}" v-if="checkDate(setor)")
+            .setor(v-for="setor in post.acf.setores" @mouseover="setHov(setor)" @mouseout="setOut(setor)" @click="selectSetor(setor)" :class="{active: setorSelected == setor, selected: setorSelected == setor, hovered: setorHovered == setor.nome}" v-if="checkDate(setor)")
               h3 {{setor.nome}}
           .list-entradas(v-if="setorSelected")
             button(@click="setorSelected=''")
@@ -259,6 +259,14 @@ export default {
   },
 
   methods: {
+
+    setHov(setor) {
+      EventBus.$emit('setHov', setor.nome)
+    },
+
+    setOut(setor) {
+      EventBus.$emit('setOut', setor.nome)
+    },
 
     /**
      * Seleciona a data
