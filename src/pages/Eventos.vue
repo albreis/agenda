@@ -10,12 +10,22 @@
           app-days-bar
           .main
             .categories
-              .category
+              .category(v-if="events.today.length")
                 .carousel
                   .prev
                     .fa.fa-chevron-left
                   .events
-                    grid-item(v-for="post in posts" :item="post")
+                    grid-item(v-for="event in events.today" :item="event")
+                  .next
+                    .fa.fa-chevron-right
+              .category(v-if="events.next.length")
+                h3 Próximos eventos
+                hr
+                .carousel
+                  .prev
+                    .fa.fa-chevron-left
+                  .events
+                    grid-item(v-for="event in events.next" :item="event")
                   .next
                     .fa.fa-chevron-right
             .sidebar(v-if="0")
@@ -38,7 +48,10 @@ export default {
 
   data() {
     return {
-      posts: [],
+      events: {
+        today: [],
+        next: []
+      },
       activeDay: ''
     };
   },
@@ -49,15 +62,12 @@ export default {
       this.activeDay = date
     });
 
+
   },
   
   methods: {
 
-    _getPosts() {
-      this._getPosts(0)
-    },
-
-    getPosts(index) {
+    getTodayEvents(index) {
       this.$http.get('eventos', {
         params: {
           _embed: true,
@@ -65,15 +75,32 @@ export default {
           dia: this.activeDay.valueOf()
         }
       }).then(resp => {
-        this.posts = resp.data
+        this.events.today = resp.data
+        this.getNextEvents()
       })
     },
+
+    getNextEvents() {
+      var exclude = []
+      this.events.today.forEach((item) => {
+        return exclude.push(item.id);
+      })
+      this.$http.get('eventos', {
+        params: {
+          _embed: true,
+          per_page: 12,
+          //exclude: exclude
+        }
+      }).then(resp => {
+        this.events.next = resp.data
+      })
+    }
 
   },
 
   watch: {
     activeDay() {
-      this.getPosts()
+      this.getTodayEvents()
     }
   }
 }

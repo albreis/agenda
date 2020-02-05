@@ -41,26 +41,44 @@
       .container
         .left
           .list-setores(v-if="!setorSelected")
-            h2(v-if="checkDate(setorSelected)") Selecione o Setor
-            .setor(v-for="setor in post.acf.setores" @click="selectSetor(setor)" :class="{active: setorSelected == setor}" v-if="checkDate(setor)")
+            h2 Selecione o Setor
+            .setor(v-for="setor in post.acf.setores" @click="selectSetor(setor)" :class="{active: setorSelected == setor, selected: setorSelected == setor, hovered: setorHovered == setor.nome}" v-if="checkDate(setor)")
               h3 {{setor.nome}}
           .list-entradas(v-if="setorSelected")
             button(@click="setorSelected=''")
               .fa.fa-chevron-left
               span Alterar setor
-            h2 Selecione o tipo de entrada
-            .entradas
+            h2(v-if="!entradaSelected") Selecione o tipo de entrada
+            h3(v-if="setorSelected") Setor: {{setorSelected.nome}} 
+            h3(v-if="entradaSelected") Tipo de entrada: {{entradaSelected.nome}}
+            h3(v-if="currentReservas").reservas Reservas
+              span.reserva(v-for="reserva in currentReservas") [{{reserva.code}}]
+            .entradas(v-if="!entradaSelected")
               .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
                 h3 {{entrada.nome}}
-                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome].reservas[entrada.nome].quantidade.qty" type="text")
-        .right(v-if="setorSelected.aceita_reservar_loca")
+                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome]._entradas[entrada.nome].quantidade.qty" type="text")
+        .right
+          app-map-evento(:mapa="post.acf.mapa_do_local" v-if="!setorSelected")
+          app-map-setor(:mapa="setorSelected.mapa_do_setor" v-if="entradaSelected")
+
 </template>
 <script>
 import Vue from 'vue';
+import MapEvento from '../components/MapEvento.vue';
+import MapSetor from '../components/MapSetor.vue';
+import { EventBus } from '../event-bus.js';
 
 export default {
+  components: {
+    appMapEvento: MapEvento,
+    appMapSetor: MapSetor
+  },
+
   data() {
     return {
+      setorHovered: '',
+      currentSetor: '',
+      currentReservas: [],
       /**
        * Data selecionada
        */
@@ -118,6 +136,17 @@ export default {
 
   mounted() {
 
+    EventBus.$on('setorSelected', (setor) => {
+      this.currentSetor = setor
+    })
+    EventBus.$on('setorHovered', (setor) => {
+      this.setorHovered = setor
+    })
+    EventBus.$on('reservaSelected', (reservas) => {
+      this.currentReservas = reservas      
+      console.log('reservas selecionadas', reservas)
+    })
+
     /**
      * Verifica-se se existem dados de checkout na seção
      * para se caso a pessoa tenha dado refresh na página
@@ -154,15 +183,34 @@ export default {
 
   watch: {
     /**
+     * Observa mudanças ao selecionar o setor
+     * usando o mapa SVG
+     */
+    currentSetor() {
+      for(var i in this.post.acf.setores) {
+        if(this.currentSetor == this.post.acf.setores[i].nome) {
+          this.selectSetor(this.post.acf.setores[i]);
+          return;
+        }
+      }
+    },
+
+    currentReservas() {
+      if(this.dateSelected && this.setorSelected && this.entradaSelected)
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome], 'reservas', this.currentReservas)
+    },
+    
+    /**
      * Observa a mudança da data selecionada
      */
     dateSelected() {
       /**
        * Ao alterar a data é necessário limpar os atributos:
        */
-      this.setorSelected = ''
-      this.entradaSelected = ''
-      this.reservaSelected = ''
+      //this.setorSelected = ''
+      //this.entradaSelected = ''
+      //this.reservaSelected = ''
+      //this.currentReservas = []
     },
     
     /**
@@ -174,6 +222,7 @@ export default {
        */
       this.entradaSelected = ''
       this.reservaSelected = ''
+      this.currentReservas = []
     },
     
     /**
@@ -185,6 +234,7 @@ export default {
        * Apenas em checkout onde seja necessário selecionar poltrona, mesa, etc
        */
       this.reservaSelected = ''
+      this.currentReservas = []
     },
 
     /**
@@ -217,7 +267,7 @@ export default {
       /**
        * Define a data selecionada
        */
-      this.dateSelected = date
+      this.dateSelected = date == this.dateSelected ? '' : date
 
       /**
        * Se a data ainda não existe no checkout é adicionada
@@ -258,8 +308,8 @@ export default {
        * Se o atributo "reservas" não estiver inicializado para esse setor
        * ele será criado.
        */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas)
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome], 'reservas', {})
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas)
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome], '_entradas', {})
     },
 
     /**
@@ -275,28 +325,14 @@ export default {
        * Se a entrada não existe no atributo "reservas" do setor selecionado
        * será adicionada
        */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome])
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas, this.entradaSelected.nome, entrada)
-      
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome])
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas, this.entradaSelected.nome, entrada)
+
       /**
-       * As reservas possuem 2 atributos: 
-       * qty = quantidade reservada
-       * code = código da reserva (para assentos de teatro, etc)
-       * 
-       * Para venda de ingressos onde não se escolhe numero de poltrona, mesa, etc
-       * só é necessário o atributo "qty".
-       * 
-       * Poltronas de teatro por exemplo irão ter o atributo "code" com o código da poltrona
-       * e qty com o valor 1 (já é uma poltrona é para uma pessoa)
-       * 
-       * Ingressos para show onde não precisa-se reservar mesas, cadeiras, etc
-       * ficarão com o atributo "code" em branco e podem ter o atributo "qty" com qualquer valor
-       *
-       * Obs.: os valores variam de acordo com as configurações do evento, 
-       * podendo haver mínimo e máximo
+       * Inicializa o array de reservas
        */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome].quantidade)
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome].reservas[this.entradaSelected.nome], 'quantidade', {qty: 0, code: ''})
+      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome].reservas)
+        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome], 'reservas', [])
     },
 
     /**
@@ -427,12 +463,27 @@ export default {
           font-size 11px
           span
             margin 0 3px
+.setores
+  .reservas
+    .reserva
+      margin 0 5px
+      color red
+  .container
+    display flex
+    .left
+      flex 1
+    .right
+      flex 1
+      padding 15px
+      max-width 70%
     .list-setores
       .setor
         padding 30px
         background #efefef
-        margin 10px 0
+        margin 15px 0
         cursor pointer
+        &.selected, &.hovered
+          outline 2px solid red
         h3
           margin 0
     .list-entradas

@@ -10,7 +10,7 @@ let config = {
         contentBase: path.join(__dirname, 'www'),
         compress: true,
         port: 9000,
-        host: '192.168.218.241',
+        host: '0.0.0.0',
         liveReload: false,
         writeToDisk: false,
         hot: true

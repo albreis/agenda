@@ -9,13 +9,24 @@
             | Eventos do dia
           app-days-bar
           .main
-            .categories
-              .category(v-if="category && posts.length")
+            .categories(v-if="category && events.today.length")
+              .category
                 .carousel
                   .prev
                     .fa.fa-chevron-left
                   .events
-                    grid-item(v-for="post in posts" :item="post" :category="category")
+                    grid-item(v-for="event in events.today" :item="event" :category="category")
+                  .next
+                    .fa.fa-chevron-right
+            .categories(v-if="category && events.next.length")
+              h3 Próximos eventos
+              hr
+              .category
+                .carousel
+                  .prev
+                    .fa.fa-chevron-left
+                  .events
+                    grid-item(v-for="event in events.next" :item="event" :category="category")
                   .next
                     .fa.fa-chevron-right
               .load-more(@click="loadMore" v-if="showLoadMore") Mais eventos
@@ -40,7 +51,10 @@ export default {
   data() {
     return {
       category: {},
-      posts: [],
+      events: {
+        today: [],
+        next: []
+      },
       showLoadMore: false,
       activeDay: '',
       page: 1
@@ -59,18 +73,16 @@ export default {
       }
     }).then(resp => {
       this.category = resp.data[0]
-      this.getPosts()
+      this.getTodayEvents()
     })
 
   },
   
   methods: {
 
-    getPosts() {
-      
+    getTodayEvents(index) {
       if(!this.category.id) return;
-
-
+      
       this.$http.get('eventos', {
         params: {
           _embed: true,
@@ -80,9 +92,27 @@ export default {
           dia: this.activeDay.valueOf()
         }
       }).then(resp => {
-        //this.posts = resp.data
+        this.events.today = resp.data
+        this.getNextEvents()
+      })
+    },
+
+    getNextEvents() {
+      var exclude = []
+      this.events.today.forEach((item) => {
+        return exclude.push(item.id);
+      })
+      this.$http.get('eventos', {
+        params: {
+          _embed: true,
+          per_page: 9,
+          page: this.page,
+          categoria: [this.category.id],
+          //exclude: exclude
+        }
+      }).then(resp => {
         for(var i in resp.data) {
-          this.posts.unshift(resp.data[i])
+          this.events.next.unshift(resp.data[i])
         }
         this.showLoadMore = resp.data.length >= 3;
       })
@@ -90,7 +120,7 @@ export default {
 
     loadMore() {
       this.page++
-      this.getPosts()
+      this.getNextEvents()
     },
 
   },
@@ -122,9 +152,8 @@ export default {
         color #888
         margin-right 10px
   .main
-    display flex
     .categories
-      padding 30px 0
+      padding 30px 0 0 0
       flex 1
       .category
         .category-title

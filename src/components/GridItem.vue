@@ -16,7 +16,7 @@ router-link.event(:to="`${item.categories[0].slug}/${item.slug}`")
           span(v-if="item.acf.datas[item.acf.datas.length - 1].hora_de_termino") 
             span as {{item.acf.datas[item.acf.datas.length - 1].hora_de_termino}}
     h3.title 
-      strong {{item.title.rendered}}
+      strong(v-html="item.title.rendered")
     h4.headline 
       span(v-if="item.acf.endereco.cidade") {{item.acf.endereco.cidade}} 
       span(v-if="item.acf.endereco.estado") 
@@ -88,4 +88,5 @@ export default {
     color #f43
     margin 5px 0
     font-weight 600
+    min-height 50px
 </style>
