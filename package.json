@@ -1,8 +1,8 @@
 {
-  "name": "br.com.albreis.coleta",
-  "displayName": "Coleta",
-  "version": "1.6.4",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "name": "br.com.albreis.vuegenda",
+  "displayName": "Vuegenda",
+  "version": "1.6.5",
+  "description": "Frontend para exibição de eventos",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,8 +14,8 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
+  "author": "Albreis - Design & Programação",
+  "license": "GPLv2",
   "dependencies": {
     "axios": "^0.19.2",
     "clean-webpack-plugin": "^3.0.0",
