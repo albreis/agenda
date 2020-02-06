@@ -8,11 +8,7 @@
         </router-link>
       </li>
     </ul>
-    <div class="location">
-      <span class="fa fa-map-marker-alt"></span> 
-      <span class="current-location">{{location.label}} </span>
-      <!-- <span class="fa fa-chevron-down"></span> -->
-    </div>
+    <app-location-selector></app-location-selector>
     <div class="user-menu">
       <span class="fa fa-user"></span> 
     </div>
@@ -22,10 +18,14 @@
   </header>
 </template>
 <script>
-
+import LocationSelector from './LocationSelector.vue';
 import { EventBus } from '../event-bus.js';
 
 export default {
+  components: {
+    appLocationSelector: LocationSelector
+  },
+  
   data() {
     return {
       showMenuMobile: false,
@@ -60,17 +60,6 @@ export default {
   color #fff
   justify-content space-between
   align-items center
-  .location
-    margin-right 30px
-    padding 8px 15px
-    border 1px solid #fff
-    border-radius 5px
-    .fa
-      font-size 20px
-    .current-location 
-      padding 0 5px
-      font-size 14px
-      font-weight bold
   .user-menu
     margin-right 30px
     border-radius 100px

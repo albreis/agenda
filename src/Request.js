@@ -12,6 +12,14 @@ const instance = axios.create({
  * e exibe uma progress bar
  */
 instance.interceptors.request.use(config => {
+  console.log(config)
+  var cidade = sessionStorage.cidade
+  var estado = sessionStorage.estado
+  if(!config.params) {
+    config.params = {}
+  }
+  if(cidade) config.params.cidade = cidade
+  if(estado) config.params.estado = estado
   NProgress.start()
   return config
 })

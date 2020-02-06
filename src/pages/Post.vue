@@ -8,16 +8,16 @@
             img(:src="post.images.large")
           .right
             .header
-              h1 {{post.title.rendered}}
-              h3 {{post.categories[0].name}}
+              h1(v-html="post.title.rendered")
+              h3(v-html="post.categories[0].name")
             .footer
-              .headline {{post.acf.headline}}
-              .data {{post.acf.datas[0].dia}}
-              .local {{post.acf.endereco.local}}
+              .headline(v-html="post.acf.headline")
+              //- .data {{post.acf.datas[0].dia}}
+              .local(v-html="post.acf.endereco.local")
               address.cidade-estado 
-                span.cidade {{post.acf.endereco.cidade}}&nbsp;
+                span.cidade(v-html="post.acf.endereco.cidade")
                 span.fa.fa-map-marker-alt
-                span.estado &nbsp;{{post.acf.endereco.estado}} 
+                span.estado(v-html="post.acf.endereco.estado") 
   .page-content
     .container
       .post-content(:class="{'show-full': showFullContent}")
@@ -57,7 +57,7 @@
               .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
                 h3 {{entrada.nome}}
                 input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome]._entradas[entrada.nome].quantidade.qty" type="text")
-        .right
+        .right(v-if="setorSelected.mostrar_mapa")
           app-map-evento(:mapa="post.acf.mapa_do_local" v-if="!setorSelected")
           app-map-setor(:mapa="setorSelected.mapa_do_setor" v-if="entradaSelected")
 
@@ -422,6 +422,7 @@ export default {
             font-style normal
             .fa
               color #f43
+              margin 0 3px
   .toggle-content
     z-index 2
     position relative
@@ -460,7 +461,7 @@ export default {
         cursor pointer
         &.active
           color #f43
-          background #fff
+          background #f5f5f5
         .dia
           font-size 40px
         .mes-ano

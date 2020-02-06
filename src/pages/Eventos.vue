@@ -62,6 +62,11 @@ export default {
       this.activeDay = date
     });
 
+    EventBus.$on('locationChanged', () => {
+      this.getTodayEvents()
+      this.getNextEvents()
+    })
+
 
   },
   
@@ -89,6 +94,8 @@ export default {
         params: {
           _embed: true,
           per_page: 12,
+          proximos: true,
+          dia: this.activeDay.valueOf()
           //exclude: exclude
         }
       }).then(resp => {
