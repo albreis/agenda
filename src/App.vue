@@ -5,16 +5,26 @@
         <div @click="clickOnBody">
             <router-view :key="$route.fullPath"></router-view>
         </div>
+        <footer>
+            Versão {{version}}
+        </footer>
     </div>
 </template>
 <script>
 import Vue from 'vue'
 import Header from './components/Header.vue';
 import { EventBus } from './event-bus.js';
+import pgk from '../package.json';
 
 export default {    
   components: {
     appHeader: Header
+  },
+
+  data() {
+      return {
+        version: pgk.version
+      } 
   },
 
   methods: {
@@ -46,4 +56,7 @@ img
     max-width 1200px
     display block
     margin auto
+footer
+    text-align center
+    padding 30px 
 </style>
