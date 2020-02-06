@@ -16,5 +16,4 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 - Pesquisa avançada por: localização, categoria, tags, faixa de preço, datas, métodos de pagamento, tipos de entrada, etc
 
 ![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot.png?v=2)
-
-![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot-mobile-1.png) ![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot-mobile-2.png)
+![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot-4.jpg)
