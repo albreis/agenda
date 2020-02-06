@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm version minor && webpack"
+    "build": "git add . && git commit -m '$0' && npm version minor && webpack"
   },
   "keywords": [
     "ecosystem:cordova"
