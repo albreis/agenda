@@ -17,4 +17,5 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 
 # Versões
 
+1.6.6 - Removidos arquivos de configuração do ACF
 1.6.2 - Adicionado filtro de cidades
