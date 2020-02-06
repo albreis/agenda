@@ -23,7 +23,7 @@ export default {
       /**
        * Localização atual
        */
-      currentLocation: '',
+      currentLocation: [],
 
       /**
        * Exibir lista de cidades

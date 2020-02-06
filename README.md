@@ -15,5 +15,6 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 - Geolocalização
 - Pesquisa avançada por: localização, categoria, tags, faixa de preço, datas, métodos de pagamento, tipos de entrada, etc
 
-![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot.png?v=2)
-![alt text](https://raw.githubusercontent.com/AlbreisNetwork/agenda/master/screenshot-4.jpg)
+# Versões
+
+1.6.2 - Adicionado filtro de cidades

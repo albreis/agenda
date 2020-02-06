@@ -6,7 +6,7 @@
             <router-view :key="$route.fullPath"></router-view>
         </div>
         <footer>
-            Versão {{version}}
+            <small>Desenvolvido por <a href="https://albreis.com.br" target="_blank"><strong>Albreis - Design & Programação</strong></a>| Versão {{version}}</small>
         </footer>
     </div>
 </template>
@@ -60,4 +60,7 @@ img
 footer
     text-align center
     padding 30px 
+    a
+        color #111
+        margin-right 8px
 </style>
