@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "git add . && git commit && git push && npm version minor && webpack"
+    "build": "git add . && git commit && git push && npm version minor && webpack",
+    "watch": "onchange './src/**/**' -- npm version patch",
+    "start": "npm run watch & npx webpack-dev-server"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -20,6 +22,8 @@
     "cordova-plugin-whitelist": "^1.3.4",
     "html-webpack-plugin": "^3.2.0",
     "jspdf": "^1.5.3",
+    "npm-watch": "^0.6.0",
+    "onchange": "^6.1.0",
     "reflect-metadata": "^0.1.13",
     "vue": "^2.6.11",
     "vue-analytics": "^5.22.1",

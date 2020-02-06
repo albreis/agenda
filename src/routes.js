@@ -9,8 +9,6 @@ import VueAnalytics from 'vue-analytics'
 
 Vue.use(Router);
 
-
-
 const routes = [
   { path: '/', component: Eventos},
   { path: '/ingresso', component: Ingresso },
@@ -19,9 +17,6 @@ const routes = [
   { path: '/:category/:post', component: Post }
 ]
 
-// 3. Create the router instance and pass the `routes` option
-// You can pass in additional options here, but let's
-// keep it simple for now.
 const router = new Router({
   //mode: 'history',
   routes: routes // short for `routes: routes`

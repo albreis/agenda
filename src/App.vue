@@ -21,6 +21,7 @@ export default {
     appHeader: Header
   },
 
+
   data() {
       return {
         version: pgk.version
