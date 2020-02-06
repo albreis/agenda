@@ -1,14 +1,14 @@
 {
   "name": "br.com.albreis.coleta",
   "displayName": "Coleta",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm version -f minor",
     "build": "webpack",
-    "postversion": "git add . && git commit && git push",
+    "postversion": "git push",
     "start": "npx webpack-dev-server"
   },
   "keywords": [
