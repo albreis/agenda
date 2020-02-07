@@ -17,6 +17,8 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 
 # Versões
 
+1.7.2 - Alterado nome do evento "changeDate" para "dateChanged"
+\
 1.7.1 - Refatoração do arquivo de rotas
 \
 1.7.0 - Adicionado sistema de login. Usuário: vuegenda, Senha: 123432345

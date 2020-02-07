@@ -80,7 +80,7 @@ export default {
 
   watch: {
     activeDay() {
-      EventBus.$emit('changeDate', this.activeDay)
+      EventBus.$emit('dateChanged', this.activeDay)
     }
   }
 }

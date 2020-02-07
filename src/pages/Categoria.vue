@@ -63,7 +63,7 @@ export default {
 
   mounted(){
     
-    EventBus.$on('changeDate', (date) => {
+    EventBus.$on('dateChanged', (date) => {
       this.activeDay = date
     });
 
