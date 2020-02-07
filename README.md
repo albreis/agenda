@@ -47,6 +47,8 @@ setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
 # Versões
 
+1.8.5 - Atualizações na página de Login
+\
 1.8.4 - Excluido eventos do dia dos "outros eventos"
 \
 1.8.3 - Ajuste de erro no README

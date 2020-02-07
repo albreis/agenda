@@ -5,10 +5,10 @@
       br
       form(@submit="login")
         .form-field
-          label Username
-          input(v-model="username")
+          label E-mail
+          input(v-model="email")
         .form-field
-          label Password
+          label Senha
           input(v-model="password" type="password")
         button(type="submit") Entrar
         br
@@ -21,7 +21,7 @@ import { EventBus } from '../event-bus.js'
 export default {
   data() {
     return {
-        username: '',
+        email: '',
         password: ''
     }
   },
@@ -29,7 +29,7 @@ export default {
   methods: {
     login(e) {
       e.preventDefault()
-      this.$auth.post('token', {username: this.username, password: this.password}).then(res => {
+      this.$auth.post('token', {username: this.email, password: this.password}).then(res => {
         sessionStorage.token = res.data.token  
         EventBus.$emit('userLogin')
         this.$router.push('/')   
