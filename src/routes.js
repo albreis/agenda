@@ -5,6 +5,7 @@ import Categoria from './pages/Categoria.vue';
 import Post from './pages/Post.vue';
 import Search from './pages/Search.vue';
 import Login from './pages/Login.vue';
+import Signup from './pages/Signup.vue';
 import Ingresso from './pages/Ingresso.vue';
 import MyAccount from './pages/MyAccount.vue';
 import VueAnalytics from 'vue-analytics'
@@ -14,6 +15,7 @@ Vue.use(Router);
 const routes = [
   { path: '/', component: Eventos},
   { path: '/login', component: Login},
+  { path: '/criar-conta', component: Signup},
   { path: '/minha-conta', component: MyAccount, meta: {auth: true}},
   { path: '/ingresso', component: Ingresso },
   { path: '/pesquisar', component: Search },

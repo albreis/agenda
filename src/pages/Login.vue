@@ -11,6 +11,10 @@
           label Password
           input(v-model="password")
         button(type="submit") Entrar
+        br
+        p Não possui conta? 
+          router-link(to="/criar-conta") 
+            strong CADASTRE-SE
 </template>
 <script>
 import { EventBus } from '../event-bus.js'
