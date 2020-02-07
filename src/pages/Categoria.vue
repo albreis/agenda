@@ -19,7 +19,7 @@
                   .next
                     .fa.fa-chevron-right
             .categories(v-if="category && events.next.length")
-              h3 Próximos eventos
+              h3 Outros eventos
               hr
               .category
                 .carousel
@@ -114,6 +114,7 @@ export default {
           page: this.page,
           categoria: [this.category.id],
           proximos: true,
+          exclude: exculde,
           dia: this.activeDay.valueOf()
 
         }

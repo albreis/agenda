@@ -19,7 +19,7 @@
                   .next
                     .fa.fa-chevron-right
               .category(v-if="events.next.length")
-                h3 Próximos eventos
+                h3 Outros eventos
                 hr
                 .carousel
                   .prev
@@ -100,8 +100,8 @@ export default {
           _embed: true,
           per_page: 12,
           proximos: true,
-          dia: this.activeDay.valueOf()
-          //exclude: exclude
+          dia: this.activeDay.valueOf(),
+          exclude: exclude
         }
       }).then(resp => {
         this.events.next = resp.data

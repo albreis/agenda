@@ -46,6 +46,9 @@ setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
 
 # Versões
+
+1.8.4 - Excluido eventos do dia dos "outros eventos"
+\
 1.8.3 - Ajuste de erro no README
 \
 1.8.2 - Atualização da documentação

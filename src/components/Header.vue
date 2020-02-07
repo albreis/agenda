@@ -135,19 +135,17 @@ export default {
     padding 0
     margin 0 30px 0 0
     display flex
-    align-items right
+    align-items center
+    justify-content space-evenly
     flex-wrap wrap
     li
       display flex
-      flex 1
       white-space nowrap
       justify-content space-evenly
       line-height 26px
-      border-bottom 5px solid transparent
+      border-bottom 2px solid transparent
       font-weight bold
       font-size 16px
-      &+li
-        margin-left 15px
       &.active
         border-bottom 2px solid #fff
         font-weight bold
