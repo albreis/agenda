@@ -15,8 +15,22 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 - Geolocalização
 - Pesquisa avançada por: localização, categoria, tags, faixa de preço, datas, métodos de pagamento, tipos de entrada, etc
 
+Usuário de teste:
+
+username: vuegenda
+password: 123432345
+
+# Documentação
+
+Componentes:
+
+DaysBar - Exibe o seletor de datas. Emite o evento "dateChanged" ao alterar a data.
+
+
 # Versões
 
+1.7.3 - Refatoração e documentação do componente DaysBar
+\
 1.7.2 - Alterado nome do evento "changeDate" para "dateChanged"
 \
 1.7.1 - Refatoração do arquivo de rotas

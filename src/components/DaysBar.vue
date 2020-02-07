@@ -27,52 +27,124 @@ export default {
 
   data() {
     return {
+      /**
+       * Dias estão sendo animados?
+       */
       animating: false,
-      week: 0,
+
+      /**
+       * Dias visíveis
+       */
       visibleDays: 7,
+
+      /**
+       * Dia selecionado
+       */
       activeDay: false,
+
+      /**
+       * Lista dos dias visíveis
+       */
       week_days: [],
+
+      /**
+       * Nome dos dias
+       */
       days: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+
+      /**
+       * Abreviação dos meses
+       */
       months: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-      s: '',
-      now: new Date,
+
+      /**
+       * Data atual
+       */
       curr_date: new Date
     }
   },
 
   mounted(){
+    /**
+     * Se a largura disponível for menor que 800
+     * mostra um dia por vez
+     */
     if(window.innerWidth < 800) {
       this.visibleDays = 1
     }
+
+    /**
+     * Inicializa a renderização da semana
+     */
     this.getWeek()
   },
   
   methods: {
+    /**
+     * Monta a exibição da semana
+     */
     getWeek() {
-      var app = this
       this.week_days = []
       this.activeDay = false
+
+      /**
+       * Anima os dias
+       */
       this.animating = true
+
+      /**
+       * Itera sobre os dias para montar a semana
+       */
       for(var d = 0; d < this.visibleDays; d++) {
+        /**
+         * Inicializa um objeto Date baseado na data atual
+         */
         var date = new Date(this.curr_date);
+
+        /**
+         * Define o primeir dia como ativo
+         */
         if(this.activeDay===false) {
           this.activeDay = date
         }
+
+        /**
+         * Incrementa os dias para criar a semana
+         */
         date.setDate(date.getDate() + d);
+
+        /**
+         * Adiciona o dia na semana
+         */
         this.week_days.push(date)
       }
-      //console.log(this.curr_date)
+
+      /**
+       * Timeout para pausar a animação
+       */
       setTimeout(function(){
         app.animating = false
       }, 1000)
     },
 
+    /**
+     * Navega para o futuro no tempo
+     */
     next() {
+      /**
+       * Adiciona dias na data atual
+       */
       this.curr_date = this.curr_date.addDays(this.visibleDays)
       this.getWeek()
     },
 
+    /**
+     * Navega para o passado
+     */
     prev() {
+      /**
+       * Subtri dias da data atual
+       */
       this.curr_date = this.curr_date.subDays(this.visibleDays)
       this.getWeek()
     }
