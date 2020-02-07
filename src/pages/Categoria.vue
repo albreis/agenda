@@ -82,6 +82,7 @@ export default {
     }).then(resp => {
       this.category = resp.data[0]
       this.getTodayEvents()
+      this.getNextEvents()
     })
 
   },
@@ -101,7 +102,6 @@ export default {
         }
       }).then(resp => {
         this.events.today = resp.data
-        this.getNextEvents()
       })
     },
 
@@ -134,16 +134,14 @@ export default {
       this.getNextEvents()
     },
 
-  },
-  
-  watch: {
-    activeDay() {
+    refresh() {      
       this.events.today = []
       this.events.next = []
       this.page = 1
       this.getTodayEvents()
       this.getNextEvents()
     }
+
   }
 }
 </script>
