@@ -46,11 +46,12 @@ setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
 
 # Versões
-
+1.8.3 - Ajuste de erro no README
+\
 1.8.2 - Atualização da documentação
 \
 1.8.1 - Alterado campo de senha na página de Login para "type password"
-\ 
+\
 1.8.0 - Adicionado página de cadastro
 \
 1.7.12 - Correção de bug na página de categoria
