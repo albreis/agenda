@@ -58,9 +58,16 @@ export default {
       months: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
 
       /**
-       * Data atual
+       * Data atual selecionada
        */
-      curr_date: new Date
+      curr_date: new Date,
+
+      /**
+       * Data de hoje
+       */
+      now: new Date
+
+
     }
   },
 
@@ -84,6 +91,7 @@ export default {
      * Monta a exibição da semana
      */
     getWeek() {
+      var app = this
       this.week_days = []
       this.activeDay = false
 

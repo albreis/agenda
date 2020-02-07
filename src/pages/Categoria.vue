@@ -129,7 +129,8 @@ export default {
     activeDay() {
       this.posts = []
       this.page = 1
-      this.getPosts()
+      this.getTodayEvents()
+      this.getNextEvents()
     }
   }
 }
