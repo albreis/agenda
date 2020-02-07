@@ -63,6 +63,14 @@ export default {
 
   mounted(){
     
+    EventBus.$on('locationChanged', (date) => {
+      this.events.today = []
+      this.events.next = []
+      this.page = 1
+      this.getTodayEvents()
+      this.getNextEvents()
+    });
+    
     EventBus.$on('dateChanged', (date) => {
       this.activeDay = date
     });
@@ -98,6 +106,7 @@ export default {
     },
 
     getNextEvents() {
+      if(!this.category.id) return;
       var exclude = []
       this.events.today.forEach((item) => {
         return exclude.push(item.id);
@@ -108,7 +117,9 @@ export default {
           per_page: 9,
           page: this.page,
           categoria: [this.category.id],
-          //exclude: exclude
+          proximos: true,
+          dia: this.activeDay.valueOf()
+
         }
       }).then(resp => {
         for(var i in resp.data) {
@@ -127,7 +138,8 @@ export default {
   
   watch: {
     activeDay() {
-      this.posts = []
+      this.events.today = []
+      this.events.next = []
       this.page = 1
       this.getTodayEvents()
       this.getNextEvents()

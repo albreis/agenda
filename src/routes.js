@@ -27,7 +27,7 @@ const router = new Router({
 })
 
 /**
- * Middleware básico para verificação de
+ * Middleware básico para verificação de rotas
  */
 router.beforeEach((to, from, next) => {
   /**

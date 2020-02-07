@@ -33,6 +33,8 @@ dateChanged - Emitido ao alterar a data
 
 # Versões
 
+1.7.9 - Correção de bug na pa´gina de categoria
+\
 1.7.8 - Correção de bug no componente DaysBar
 \
 1.7.7 - Alteração no README.md
