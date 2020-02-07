@@ -17,6 +17,8 @@ Ainda está em desenvolvimento mas segue algumas features que vão estar present
 
 # Versões
 
+1.7.0 - Adicionado sistema de login. Usuário: vuegenda, Senha: 123432345
+\
 1.6.6 - Removidos arquivos de configuração do ACF
 \
 1.6.2 - Adicionado filtro de cidades

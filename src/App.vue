@@ -2,7 +2,7 @@
     <div class="content-main">
         <app-header></app-header>
         <!-- Renderiza a rota -->
-        <div @click="clickOnBody">
+        <div class="main-inner" @click="clickOnBody">
             <router-view :key="$route.fullPath"></router-view>
         </div>
         <footer>
@@ -57,6 +57,8 @@ img
     max-width 1200px
     display block
     margin auto
+.main-inner
+    min-height 80vh
 footer
     text-align center
     padding 30px 

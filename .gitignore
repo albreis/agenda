@@ -12,3 +12,5 @@ src/pages/Ingressos.vue
 src/pages/SearchIngressos.vue
 src/pages/CategoryIngressos.vue
 v8-compile-cache-0/
+npm-debug.log
+app.config.json

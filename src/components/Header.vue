@@ -9,12 +9,15 @@
       </li>
     </ul>
     <app-location-selector></app-location-selector>
-    <div class="user-menu">
-      <span class="fa fa-user"></span> 
+    <div class="user-menu" @click="login">
+      <span v-if="!user" class="fa fa-user"></span>
+      <img v-if="user" :src="user.picture.thumbnail" /> 
     </div>
     <div class="toggle" @click="showMenuMobile = !showMenuMobile">
       <span class="fa fa-bars"></span>
     </div>
+    <span v-if="user" class="btn-logout" @click="logout">Sair</span>
+    <span v-if="!user" class="btn-logout" @click="login">Login</span>
   </header>
 </template>
 <script>
@@ -28,6 +31,7 @@ export default {
   
   data() {
     return {
+      user: '',
       showMenuMobile: false,
       location: {
         label: 'Todas as cidades',
@@ -36,7 +40,45 @@ export default {
       categorias: []
     }
   },
-  mounted() {
+
+  methods: {
+    getUser() { 
+  
+      if(sessionStorage.token.trim() != '') {
+        this.$http.get('users/me').then(res => {
+          sessionStorage.user = JSON.stringify(res.data)
+          this.user = res.data
+        })
+      }
+    
+    },
+
+    logout() {
+      this.$auth.post('token/validate').then(res => {
+        console.log(res)
+        sessionStorage.token = ''
+        sessionStorage.user = ''
+        this.user = ''
+        EventBus.$emit('userLogout')
+      })
+    },
+
+    login() {
+      var url = '/login';
+      if(sessionStorage.token) {
+        url = '/minha-conta'
+      }
+      this.$router.push(url)
+    }
+  },
+
+  mounted() {  
+
+    this.getUser()
+
+    EventBus.$on('userLogin', () => {
+      this.getUser()
+    })
 
     EventBus.$on('clickOnBody', () => { this.showMenuMobile = false})
 
@@ -60,8 +102,11 @@ export default {
   color #fff
   justify-content space-between
   align-items center
-  .user-menu
+  .btn-logout
     margin-right 30px
+    cursor pointer
+  .user-menu
+    margin-right 15px
     border-radius 100px
     border 2px solid #fff
     width 40px
@@ -69,6 +114,10 @@ export default {
     line-height 34px
     text-align center
     font-size 24px
+    cursor pointer
+    img
+      border-radius 100px
+      width 40px
   .toggle
     cursor pointer
     display none
@@ -98,7 +147,7 @@ export default {
       font-weight bold
       font-size 16px
       &+li
-        margin-left 20px
+        margin-left 15px
       &.active
         border-bottom 2px solid #fff
         font-weight bold
