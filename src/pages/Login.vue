@@ -9,7 +9,7 @@
           input(v-model="username")
         .form-field
           label Password
-          input(v-model="password")
+          input(v-model="password" type="password")
         button(type="submit") Entrar
         br
         p Não possui conta? 

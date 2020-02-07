@@ -33,6 +33,8 @@ dateChanged - Emitido ao alterar a data
 
 # Versões
 
+1.8.1 - Alterado campo de senha na página de Login para "type password"
+\ 
 1.8.0 - Adicionado página de cadastro
 \
 1.7.12 - Correção de bug na página de categoria
