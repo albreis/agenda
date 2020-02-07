@@ -67,6 +67,11 @@ export default {
       this.getNextEvents()
     })
 
+    EventBus.$on('autoRefresh', () => {
+      this.getTodayEvents()
+      this.getNextEvents()
+    })
+
 
   },
   

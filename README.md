@@ -30,9 +30,25 @@ DaysBar - Exibe o seletor de datas
 
 dateChanged - Emitido ao alterar a data
 
+locationChanged - Emitido quando a localização (cidade/estado) é alterada pelo seletor do header
+
+userSignup - Emitido quando um novo usuário cadastra-se
+
+userLogin - Emitido quando o usuário faz login
+
+autoRefresh - Emitido a cada 60 segundos. Usando para atualizar dados frequentemente.
+
+clickOnBody - Emitido quando clica-se no conteúdo, menos no header e no footer.
+
+setHov - Emitido no mouseover sobre algum setor no momento da compra.
+
+setOut - Emitido no mouseout sobre algum setor no momento da compra.
+
 
 # Versões
 
+1.8.2 - Atualização da documentação
+\
 1.8.1 - Alterado campo de senha na página de Login para "type password"
 \ 
 1.8.0 - Adicionado página de cadastro

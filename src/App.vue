@@ -6,7 +6,7 @@
             <router-view :key="$route.fullPath"></router-view>
         </div>
         <footer>
-            <small>Desenvolvido por <a href="https://albreis.com.br" target="_blank"><strong>Albreis - Design & Programação</strong></a>| Versão {{version}}</small>
+            <small>Desenvolvido por <a href="https://www.albreis.com.br" target="_blank"><strong>Albreis - Design & Programação</strong></a>| Versão {{version}}</small>
         </footer>
     </div>
 </template>
@@ -21,6 +21,12 @@ export default {
     appHeader: Header
   },
 
+  mounted() {
+      var app = this
+      setInterval(() => {
+          EventBus.$emit('autoRefresh')
+      }, 60000)
+  },
 
   data() {
       return {
