@@ -22,7 +22,7 @@ password: 123432345
 
 # Documentação
 
-## Componentes
+### Componentes
 
 DaysBar - Exibe o seletor de datas
 
@@ -33,6 +33,8 @@ dateChanged - Emitido ao alterar a data
 
 # Versões
 
+1.7.6 - Alteração no README.md
+\
 1.7.5 - Alteração no README.md
 \
 1.7.4 - Alterada documentação do componente DaysBar
