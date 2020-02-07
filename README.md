@@ -24,11 +24,17 @@ password: 123432345
 
 Componentes:
 
-DaysBar - Exibe o seletor de datas. Emite o evento "dateChanged" ao alterar a data.
+DaysBar - Exibe o seletor de datas
+
+### Eventos
+
+dateChanged - Emitido ao alterar a data
 
 
 # Versões
 
+1.7.4 - Alterada documentação do componente DaysBar
+\
 1.7.3 - Refatoração e documentação do componente DaysBar
 \
 1.7.2 - Alterado nome do evento "changeDate" para "dateChanged"
