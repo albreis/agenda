@@ -44,7 +44,7 @@ export default {
   methods: {
     getUser() { 
   
-      if(sessionStorage.token.trim() != '') {
+      if(sessionStorage.token) {
         this.$http.get('users/me').then(res => {
           sessionStorage.user = JSON.stringify(res.data)
           this.user = res.data
