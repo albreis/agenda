@@ -64,15 +64,11 @@ export default {
   mounted(){
     
     EventBus.$on('locationChanged', (date) => {
-      this.events.today = []
-      this.events.next = []
-      this.page = 1
-      this.getTodayEvents()
-      this.getNextEvents()
+      this.refresh()
     });
     
-    EventBus.$on('dateChanged', (date) => {
-      this.activeDay = date
+    EventBus.$on('dateChanged', (date) => {      
+      this.refresh()
     });
 
     this.$http.get('categoria', {

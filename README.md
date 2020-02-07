@@ -33,6 +33,8 @@ dateChanged - Emitido ao alterar a data
 
 # Versões
 
+1.7.12 - Correção de bug na página de categoria
+\
 1.7.11 - Correção de bug no componente Header
 \
 1.7.10 - Refatoração na página de categoria
