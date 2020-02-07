@@ -26,6 +26,18 @@ password: 123432345
 
 DaysBar - Exibe o seletor de datas
 
+GridItem - Exibição de cada evento nas listagens
+
+Header - Cabeçalho geral
+
+LocationSelector - Seleção de cidade. Localizado no header do site
+
+MapEvento - Exibe Mapa SVG interativo do evento
+
+MapSetor - Exibe SVG interativo do setor selecionado
+
+Search - Barra de pesquisa
+
 #### Eventos
 
 dateChanged - Emitido ao alterar a data
@@ -46,6 +58,9 @@ setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
 
 # Versões
+
+1.8.7 - Atualização da documentação
+\
 1.8.6 - Remoção dos screenshots
 \
 1.8.5 - Atualizações na página de Login
