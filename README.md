@@ -33,6 +33,8 @@ dateChanged - Emitido ao alterar a data
 
 # Versões
 
+1.7.7 - Alteração no README.md
+\
 1.7.6 - Alteração no README.md
 \
 1.7.5 - Alteração no README.md
@@ -45,7 +47,7 @@ dateChanged - Emitido ao alterar a data
 \
 1.7.1 - Refatoração do arquivo de rotas
 \
-1.7.0 - Adicionado sistema de login. Usuário: vuegenda, Senha: 123432345
+1.7.0 - Adicionado sistema de login usando JWT. Usuário: vuegenda, Senha: 123432345
 \
 1.6.6 - Removidos arquivos de configuração do ACF
 \
