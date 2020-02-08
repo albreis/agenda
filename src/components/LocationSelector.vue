@@ -1,9 +1,12 @@
 <template>  
     <div class="location">
-      <span class="fa fa-map-marker-alt"></span> 
+      <span @click="getGeolocation" class="fa fa-map-marker-alt"></span> 
       <span class="current-location" @click="showList = !showList">{{currentLocation.join(' - ')}}</span>
       <!-- <span class="fa fa-chevron-down"></span> -->
       <div class="cidades" v-if="showList">
+        <div v-if="userLocation" class="user-city" @click="select(userLocation)">
+          <span class="fas fa-street-view"></span> {{userLocation.cidade}} - {{userLocation.estado}}
+        </div>
         <div @click="reset">Todas as cidades</div>
         <div v-for="(local, key) in locations" :key="key" @click="select(local)">
           {{local.cidade}} - {{local.estado}}
@@ -20,6 +23,7 @@ import {EventBus } from '../event-bus.js'
 export default {
   data() {
     return {
+      userLocation: false,
       /**
        * Localização atual
        */
@@ -40,6 +44,16 @@ export default {
   mounted() {
 
     /**
+     * Fecha o seletor ao clica no conteudo
+     */
+    EventBus.$on('clickOnBody', () => {
+      this.showList= false
+    })
+    EventBus.$on('routeChanged', () => {
+      this.showList= false
+    })
+
+    /**
      * Inicializa a locallização atual
      */
     this.currentLocation = [sessionStorage.cidade||'Todas as cidades', sessionStorage.estado].filter(el => el)
@@ -48,9 +62,41 @@ export default {
      * Busca as localizadades disponíveis para pesquisa
      */
     this.getLocations()
+
+    /**
+     * Verifica se o usuário tem localização definida
+     */
+    if(sessionStorage.userLocation) {
+      this.userLocation = JSON.parse(sessionStorage.userLocation)
+    }
   },
 
   methods: {
+    getGeolocation() {
+      //Check if browser supports W3C Geolocation API
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          this.$http.post('geocode',{
+            lat: lat,
+            lng: lng
+          }).then(res => {
+            if(res.data.results && res.data.results.length) {
+              this.userLocation = {cidade: res.data.results[0].components.city, estado: res.data.results[0].components.state}
+              this.select(this.userLocation)
+              sessionStorage.userLocation = JSON.stringify(this.userLocation)
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }, err => {
+          console.log(err)
+        });
+      } 
+      //Get latitude and longitude;
+      
+    },
     /**
      * Reseta a configuração de localização
      */
@@ -128,6 +174,9 @@ export default {
   border 1px solid #fff
   border-radius 5px
   position relative
+  .user-city
+    background #000
+    color #fff
   .fa
     font-size 20px
   .current-location 

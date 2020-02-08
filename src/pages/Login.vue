@@ -46,6 +46,8 @@ export default {
   max-width 500px
   display block
   margin 50px auto
+  a, a:hover, a:visited
+    color #000
   .form-field
     margin-bottom 15px
   label

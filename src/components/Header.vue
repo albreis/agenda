@@ -60,6 +60,7 @@ export default {
         sessionStorage.user = ''
         this.user = ''
         EventBus.$emit('userLogout')
+        this.$router.push('/')
       })
     },
 

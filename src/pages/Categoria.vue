@@ -114,7 +114,7 @@ export default {
           page: this.page,
           categoria: [this.category.id],
           proximos: true,
-          exclude: exculde,
+          exclude: exclude,
           dia: this.activeDay.valueOf()
 
         }

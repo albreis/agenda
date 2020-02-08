@@ -9,6 +9,7 @@ import Signup from './pages/Signup.vue';
 import Ingresso from './pages/Ingresso.vue';
 import MyAccount from './pages/MyAccount.vue';
 import VueAnalytics from 'vue-analytics'
+import { EventBus } from './event-bus.js';
 
 Vue.use(Router);
 
@@ -32,6 +33,7 @@ const router = new Router({
  * Middleware básico para verificação de rotas
  */
 router.beforeEach((to, from, next) => {
+  EventBus.$emit('routeChanged')
   /**
    * Verifica se é preciso estar autenticado para
    * acessar a rota, caso verdadeiro redireciona

@@ -59,6 +59,8 @@ setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
 # Versões
 
+1.9.0 - Adicionado sistema de Geolocalização
+\
 1.8.7 - Atualização da documentação
 \
 1.8.6 - Remoção dos screenshots
