@@ -4,7 +4,7 @@ router-link.event(:to="`${item.categories[0].slug}/${item.slug}`")
     img(:src="getImage(item)")
   .footer
     .date
-      .far.fa-clock
+      //- .far.fa-clock
       span 
         span(v-if="item.acf.datas[0].dia") 
           span(v-if="item.acf.datas.length > 1") De
@@ -13,7 +13,7 @@ router-link.event(:to="`${item.categories[0].slug}/${item.slug}`")
           span(v-if="item.acf.datas[0].hora_de_inicio") as {{item.acf.datas[0].hora_de_inicio}}
         span(v-if="item.acf.datas.length > 1")
           span até {{item.acf.datas[item.acf.datas.length - 1].dia}}
-          span(v-if="item.acf.datas[item.acf.datas.length - 1].hora_de_termino") 
+          span(v-if="item.acf.datas[item.acf.datas.length - 1].hora_de_termino")
             span as {{item.acf.datas[item.acf.datas.length - 1].hora_de_termino}}
     h3.title 
       strong(v-html="item.title.rendered")
@@ -53,13 +53,9 @@ export default {
   .footer
     padding 10px
   .date
-    font-size 12px
+    font-size 11px
     color #777
-    font-weight bold
     margin-bottom 5px
-    .far
-      margin-right 5px
-      color #f43
     span
       span
         margin 0 4px 0 0

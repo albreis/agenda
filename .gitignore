@@ -5,12 +5,6 @@ hooks/
 platforms/
 plugins/
 www/
-src/components/FooterIngressos.vue
-src/components/HeaderIngressos.vue
-src/pages/Ingresso.vue
-src/pages/Ingressos.vue
-src/pages/SearchIngressos.vue
-src/pages/CategoryIngressos.vue
 v8-compile-cache-0/
 npm-debug.log
-app.config.json
+app.settings.json

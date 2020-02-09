@@ -56,9 +56,18 @@ setHov - Emitido no mouseover sobre algum setor no momento da compra.
 
 setOut - Emitido no mouseout sobre algum setor no momento da compra.
 
+## Segurança
+
+Para consumir a API é necessário obter uma chave que é usada no momento do build. Esse token é verificado
+de acordo com a origem da requisição. 
+
+As origens 127.0.0.1 e localhost estão liberadas por padrão.
+
 
 # Versões
 
+2.0.0 - Adicionado protocolo de segurança para consumo da API
+\
 1.9.0 - Adicionado sistema de Geolocalização
 \
 1.8.7 - Atualização da documentação

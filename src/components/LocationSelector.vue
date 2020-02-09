@@ -7,6 +7,9 @@
         <div v-if="userLocation" class="user-city" @click="select(userLocation)">
           <span class="fas fa-street-view"></span> {{userLocation.cidade}} - {{userLocation.estado}}
         </div>
+        <div v-if="!userLocation" class="user-city" @click="getGeolocation">
+          <span class="fa fa-crosshairs"></span> Buscar minha localização
+        </div>
         <div @click="reset">Todas as cidades</div>
         <div v-for="(local, key) in locations" :key="key" @click="select(local)">
           {{local.cidade}} - {{local.estado}}
@@ -175,8 +178,10 @@ export default {
   border-radius 5px
   position relative
   .user-city
-    background #000
+    background #f33
     color #fff
+    .fa-crosshairs
+      font-size 14px
   .fa
     font-size 20px
   .current-location 
@@ -186,6 +191,7 @@ export default {
     cursor pointer
   .cidades
     position absolute
+    overflow hidden
     top 120%
     border-radius 6px
     right 0

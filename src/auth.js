@@ -1,5 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
+import settings  from '../app.settings.json'
 
 /**
  * Inicializa o axios com a base da nossa API
@@ -18,6 +19,7 @@ instance.interceptors.request.use(config => {
   config.data = qs.stringify(config.data)
 
   config.headers['content-type'] = 'application/x-www-form-urlencoded'
+  config.headers['Origin-Token'] = settings.API_SECRET_KEY
 
   if (sessionStorage.token) {
     config.headers['Authorization'] =  'Bearer ' + sessionStorage.token

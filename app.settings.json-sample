@@ -1,0 +1,5 @@
+{
+  "API_SECRET_KEY": "",
+  "JWT_AUTH_SECRET_KEY": "",
+  "OPENCAGEDATA_API_KEY": ""
+}

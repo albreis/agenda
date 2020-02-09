@@ -58,6 +58,8 @@ export default {
 
   mounted(){
 
+    this.$http.get('userdata').then(res => console.log(res.data))
+
     EventBus.$on('dateChanged', (date) => {
       this.activeDay = date
     });
