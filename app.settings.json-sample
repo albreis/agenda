@@ -1,5 +1,6 @@
 {
   "API_SECRET_KEY": "",
   "JWT_AUTH_SECRET_KEY": "",
-  "OPENCAGEDATA_API_KEY": ""
+  "OPENCAGEDATA_API_KEY": "",
+  "BASE_URL": "https://minhacliente.com.br/wp-json/wp/v2/"
 }
