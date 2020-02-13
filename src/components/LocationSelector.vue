@@ -184,6 +184,7 @@ export default {
       font-size 14px
   .fa
     font-size 20px
+    cursor pointer
   .current-location 
     padding 0 5px
     font-size 14px

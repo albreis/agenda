@@ -20,7 +20,7 @@ const routes = [
   { path: '/minha-conta', component: MyAccount, meta: {auth: true}},
   { path: '/ingresso', component: Ingresso },
   { path: '/pesquisar', component: Search },
-  { path: '/:category', component: Categoria, meta: {auth: true} },
+  { path: '/:category', component: Categoria },
   { path: '/:category/:post', component: Post }
 ]
 

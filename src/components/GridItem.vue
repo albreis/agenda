@@ -43,8 +43,8 @@ export default {
 <style lang="stylus" scoped>
 .event
   flex-grow 1
-  flex-basis 300px
   min-width 250px
+  width 30%
   max-width 380px
   margin 0 15px 30px 15px
   text-align center

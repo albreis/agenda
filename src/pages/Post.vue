@@ -18,15 +18,9 @@
                 span.cidade(v-html="post.acf.endereco.cidade")
                 span.fa.fa-map-marker-alt
                 span.estado(v-html="post.acf.endereco.estado") 
-  .page-content
-    .container
-      .post-content(:class="{'show-full': showFullContent}")
-        div(v-html="post.content.rendered")
-      .toggle-content(@click="showFullContent=!showFullContent")
-        span.fa(:class="{'fa-chevron-up': showFullContent, 'fa-chevron-down': !showFullContent}")
   .ingressos
     .datas
-      .data(v-for="data in post.acf.datas" @click="selectDate(data)" :class="{active: dateSelected==data}")
+      .data(v-for="data in post.acf.datas")
         strong.dia {{getDateFormated(data.dia).dia}}
         .mes-ano
           strong.mes {{getDateFormated(data.dia).mes}}
@@ -37,72 +31,22 @@
           span.hora_inicio(v-if="data.hora_de_inicio") {{data.hora_de_inicio}}
           span.as(v-if="data.hora_de_inicio && data.hora_de_termino") as
           span.hora_termino(v-if="data.hora_de_termino") {{data.hora_de_termino}}
-    .setores(v-if="dateSelected")
-      .container
-        .left
-          .list-setores(v-if="!setorSelected")
-            h2 Selecione o Setor
-            .setor(v-for="setor in post.acf.setores" @mouseover="setHov(setor)" @mouseout="setOut(setor)" @click="selectSetor(setor)" :class="{active: setorSelected == setor, selected: setorSelected == setor, hovered: setorHovered == setor.nome}" v-if="checkDate(setor)")
-              h3 {{setor.nome}}
-          .list-entradas(v-if="setorSelected")
-            button(@click="setorSelected=''")
-              .fa.fa-chevron-left
-              span Alterar setor
-            h2(v-if="!entradaSelected") Selecione o tipo de entrada
-            h3(v-if="setorSelected") Setor: {{setorSelected.nome}} 
-            h3(v-if="entradaSelected") Tipo de entrada: {{entradaSelected.nome}}
-            h3(v-if="currentReservas").reservas Reservas
-              span.reserva(v-for="reserva in currentReservas") [{{reserva.code}}]
-            .entradas(v-if="!entradaSelected")
-              .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
-                h3 {{entrada.nome}}
-                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome]._entradas[entrada.nome].quantidade.qty" type="text")
-        .right(v-if="setorSelected.mostrar_mapa")
-          app-map-evento(:mapa="post.acf.mapa_do_local" v-if="!setorSelected")
-          app-map-setor(:mapa="setorSelected.mapa_do_setor" v-if="entradaSelected")
+  .page-content
+    .container
+      .post-content(:class="{'show-full': showFullContent}")
+        div(v-html="post.content.rendered")
+      .toggle-content(@click="showFullContent=!showFullContent")
+        span.fa(:class="{'fa-chevron-up': showFullContent, 'fa-chevron-down': !showFullContent}")
 
 </template>
 <script>
 import Vue from 'vue';
-import MapEvento from '../components/MapEvento.vue';
-import MapSetor from '../components/MapSetor.vue';
 import { EventBus } from '../event-bus.js';
 
 export default {
-  components: {
-    appMapEvento: MapEvento,
-    appMapSetor: MapSetor
-  },
 
   data() {
     return {
-      setorHovered: '',
-      currentSetor: '',
-      currentReservas: [],
-      /**
-       * Data selecionada
-       */
-      dateSelected: '',
-
-      /**
-       * Setor selecionado
-       */
-      setorSelected: '',
-
-      /**
-       * Entrada selecionada
-       */
-      entradaSelected: '',
-
-      /**
-       * Reserva selecionada
-       */
-      reservaSelected: '',
-
-      /**
-       * Dados do checkout
-       */
-      checkout: {},
 
       /**
        * Mostrar contetudo completo?
@@ -136,25 +80,6 @@ export default {
 
   mounted() {
 
-    EventBus.$on('setorSelected', (setor) => {
-      this.currentSetor = setor
-    })
-    EventBus.$on('setorHovered', (setor) => {
-      this.setorHovered = setor
-    })
-    EventBus.$on('reservaSelected', (reservas) => {
-      this.currentReservas = reservas      
-      console.log('reservas selecionadas', reservas)
-    })
-
-    /**
-     * Verifica-se se existem dados de checkout na seção
-     * para se caso a pessoa tenha dado refresh na página
-     */
-    if(sessionStorage.checkout) {
-        this.checkout = JSON.parse(sessionStorage.checkout)
-    }
-
     /**
      * Faz a chama a API para buscar dados do Post
      */
@@ -164,204 +89,10 @@ export default {
          * Define o post
          */
         this.post = res.data[0]
-
-        /**
-         * Adiciona o post no checkout para ser recuperado na finalização
-         * da compra
-         * 
-         * Obs.: Usar Vue.set garante que o objeto manterá sua propriedade reativa
-         */
-        Vue.set(this.checkout, this.post.id, this.post);
-
-        /**
-         * Inicializa o atributo "datas" dentro do item
-         * do checkout para inserir as datas selecionadas
-         */
-        Vue.set(this.checkout[this.post.id], 'datas', {});
       })
   },
 
-  watch: {
-    /**
-     * Observa mudanças ao selecionar o setor
-     * usando o mapa SVG
-     */
-    currentSetor() {
-      for(var i in this.post.acf.setores) {
-        if(this.currentSetor == this.post.acf.setores[i].nome) {
-          this.selectSetor(this.post.acf.setores[i]);
-          return;
-        }
-      }
-    },
-
-    currentReservas() {
-      if(this.dateSelected && this.setorSelected && this.entradaSelected)
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome], 'reservas', this.currentReservas)
-    },
-    
-    /**
-     * Observa a mudança da data selecionada
-     */
-    dateSelected() {
-      /**
-       * Ao alterar a data é necessário limpar os atributos:
-       */
-      //this.setorSelected = ''
-      //this.entradaSelected = ''
-      //this.reservaSelected = ''
-      //this.currentReservas = []
-    },
-    
-    /**
-     * Observa mudança de setor
-     */
-    setorSelected() {
-      /**
-       * Ao alterar o setor precisa limpar os atributos:
-       */
-      this.entradaSelected = ''
-      this.reservaSelected = ''
-      this.currentReservas = []
-    },
-    
-    /**
-     * Observa mudança do tipo de entrada
-     */
-    entradaSelected() {
-      /**
-       * Ao alterar a entrada precisa limpar a reserva selecionada.
-       * Apenas em checkout onde seja necessário selecionar poltrona, mesa, etc
-       */
-      this.reservaSelected = ''
-      this.currentReservas = []
-    },
-
-    /**
-     * Observa qualquer alteração nos dados do checkout
-     * A opção "deep" faz com que sejam observadas alterações
-     * em todos os níveis do objeto
-     */
-    checkout:{
-      /**
-       * Função responsável pela manipulação das observações
-       */
-      handler: function() {
-        /**
-         * Atualiza sessioStorage com os novos dados.
-         * O objeto "checkout" é transformado em string usando
-         * JSON.stringify
-         */
-        sessionStorage.checkout = JSON.stringify(this.checkout)
-      },
-      deep: true
-    }
-  },
-
   methods: {
-
-    setHov(setor) {
-      EventBus.$emit('setHov', setor.nome)
-    },
-
-    setOut(setor) {
-      EventBus.$emit('setOut', setor.nome)
-    },
-
-    /**
-     * Seleciona a data
-     */
-    selectDate(date) {
-      /**
-       * Define a data selecionada
-       */
-      this.dateSelected = date == this.dateSelected ? '' : date
-
-      /**
-       * Se a data ainda não existe no checkout é adicionada
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia]) 
-        Vue.set(this.checkout[this.post.id].datas, this.dateSelected.dia, date)
-
-      /**
-       * Inicializa o atributo "setores" para essa data no checkout.
-       * Esse atributo receberá dados dos setores que formos selecionando
-       * para comprarmos ingressos
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores) 
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia], 'setores', {})
-    },
-
-    /**
-     * Seleciona o setor
-     */
-    selectSetor(setor) {
-      /**
-       * Define o setor selecionado atualmente
-       */
-      this.setorSelected = setor
-
-      /**
-       * Verifica se o setor selecionado já existe dentro do atributo "setores"
-       * da data selecionada. Caso não exista ele é adicionado.
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome])
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores, this.setorSelected.nome, setor)
-
-      /**
-       * Cada setor dentro do checkout possui "reservas".
-       * Essas "reservas" podem ser um numero referente a um tipo de ingresso.
-       * Ou pode ter também um código referente a um assento de teatro por exemplo.
-       * 
-       * Se o atributo "reservas" não estiver inicializado para esse setor
-       * ele será criado.
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas)
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome], '_entradas', {})
-    },
-
-    /**
-     * Seleciona entrada
-     */
-    selectEntrada(entrada) {
-      /**
-       * Define a entrada selecionada atualmente
-       */
-      this.entradaSelected = entrada
-
-      /**
-       * Se a entrada não existe no atributo "reservas" do setor selecionado
-       * será adicionada
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome])
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas, this.entradaSelected.nome, entrada)
-
-      /**
-       * Inicializa o array de reservas
-       */
-      if(!this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome].reservas)
-        Vue.set(this.checkout[this.post.id].datas[this.dateSelected.dia].setores[this.setorSelected.nome]._entradas[this.entradaSelected.nome], 'reservas', [])
-    },
-
-    /**
-     * Verifica se o setor está disponível na data atual
-     */
-    checkDate(setor) {
-      var datas = setor.setor_disponivel_nas_datas;
-      var i;
-      for(i in datas) {
-        /**
-         * Se o setor estiver disponível retorna "true" e para a execução
-         */
-        if(datas[i].value == this.checkout[this.post.id].datas[this.dateSelected.dia].dia) 
-          return true;
-      }
-
-      /**
-       * Senão retorna "false"
-       */
-      return false;
-    },
 
     /**
      * Retorna a data dividida em componentes: dia, mes e ano
@@ -379,7 +110,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .post-page
-  padding-bottom 300px
   .page-header
     background #efefef
   .single-post

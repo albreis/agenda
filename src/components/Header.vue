@@ -9,15 +9,9 @@
       </li>
     </ul>
     <app-location-selector></app-location-selector>
-    <div class="user-menu" @click="login">
-      <span v-if="!user" class="fa fa-user"></span>
-      <img v-if="user" :src="user.picture.thumbnail" /> 
-    </div>
     <div class="toggle" @click="showMenuMobile = !showMenuMobile">
       <span class="fa fa-bars"></span>
     </div>
-    <span v-if="user" class="btn-logout" @click="logout">Sair</span>
-    <span v-if="!user" class="btn-logout" @click="login">Login</span>
   </header>
 </template>
 <script>
@@ -42,44 +36,9 @@ export default {
   },
 
   methods: {
-    getUser() { 
-  
-      if(sessionStorage.token) {
-        this.$http.get('users/me').then(res => {
-          sessionStorage.user = JSON.stringify(res.data)
-          this.user = res.data
-        })
-      }
-    
-    },
-
-    logout() {
-      this.$auth.post('token/validate').then(res => {
-        console.log(res)
-        sessionStorage.token = ''
-        sessionStorage.user = ''
-        this.user = ''
-        EventBus.$emit('userLogout')
-        this.$router.push('/')
-      })
-    },
-
-    login() {
-      var url = '/login';
-      if(sessionStorage.token) {
-        url = '/minha-conta'
-      }
-      this.$router.push(url)
-    }
   },
 
   mounted() {  
-
-    this.getUser()
-
-    EventBus.$on('userLogin', () => {
-      this.getUser()
-    })
 
     EventBus.$on('clickOnBody', () => { this.showMenuMobile = false})
 

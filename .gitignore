@@ -5,6 +5,13 @@ hooks/
 platforms/
 plugins/
 www/
+functions/
 v8-compile-cache-0/
 npm-debug.log
 app.settings.json
+.firebaserc
+database.rules.json
+firebase.json
+firestore.indexes.json
+firestore.rules
+storage.rules

@@ -4,13 +4,6 @@
       .fa.fa-search  
       input(type="search" v-model="s" placeholder="Nome do evento ou local")
       button(type="submit") Encontrar
-    .adv-search
-      .container
-        small
-          strong Avançado: 
-        label
-          input(v-model="filter.aceita_milhas" type="checkbox") 
-          span Aceita milhas
 </template>
 <script>
 export default {

@@ -17,7 +17,6 @@
           .month {{months[day.getMonth()]}}
       .next(@click="next")
         .fa.fa-angle-right
-    img(src="https://via.placeholder.com/100x100").logo
 </template>
 <script>
 
@@ -35,7 +34,7 @@ export default {
       /**
        * Dias visíveis
        */
-      visibleDays: 7,
+      visibleDays: 10,
 
       /**
        * Dia selecionado
@@ -176,6 +175,7 @@ export default {
     display flex
     justify-content center
     align-items center
+    max-width 150px
     .day-number
       max-width 100px
       line-height 100px
@@ -209,7 +209,6 @@ export default {
     justify-content space-evenly
     align-items center
     margin 0 0 0 50px
-    max-width 760px
     .prev
       font-size 30px
       color #f43
