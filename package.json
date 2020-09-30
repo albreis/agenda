@@ -1,14 +1,14 @@
 {
   "name": "br.com.albreis.vuegenda",
   "displayName": "Vuegenda",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Frontend para exibição de eventos",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "patch": "git add . && npm version -f patch && git push && webpack && rsync -havz --progress www root@minhacliente.com.br:/var/www/html/app/",
-    "minor": "git add . && npm version -f minor && git push && webpack && rsync -havz --progress www root@minhacliente.com.br:/var/www/html/app/",
-    "major": "git add . && npm version -f major && git push && webpack && rsync -havz --progress www root@minhacliente.com.br:/var/www/html/app/",
+    "patch": "git add . && npm version -f patch && git push && webpack && rsync -havz --progress www albreis2@162.241.2.93:/home/albreis2/vuegenda.com.br/",
+    "minor": "git add . && npm version -f minor && git push && webpack && rsync -havz --progress www albreis2@162.241.2.93:/home/albreis2/vuegenda.com.br/",
+    "major": "git add . && npm version -f major && git push && webpack && rsync -havz --progress www albreis2@162.241.2.93:/home/albreis2/vuegenda.com.br/",
     "start": "npx webpack-dev-server"
   },
   "keywords": [
