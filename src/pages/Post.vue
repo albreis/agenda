@@ -45,14 +45,13 @@
             .setor(v-for="setor in post.acf.setores" @mouseover="setHov(setor)" @mouseout="setOut(setor)" @click="selectSetor(setor)" :class="{active: setorSelected == setor, selected: setorSelected == setor, hovered: setorHovered == setor.nome}" v-if="checkDate(setor)")
               h3 {{setor.nome}}
           .list-entradas(v-if="setorSelected")
-            button(@click="setorSelected=''")
-              .fa.fa-chevron-left
-              span Alterar setor
             h2(v-if="!entradaSelected") Selecione o tipo de entrada
             h3(v-if="setorSelected") Setor: {{setorSelected.nome}} 
-            h3(v-if="entradaSelected") Tipo de entrada: {{entradaSelected.nome}}
+              small.change(@click="setorSelected=''") [alterar]
+            h3(v-if="entradaSelected") Tipo de entrada: {{entradaSelected.nome}} 
+              small.change(@click="entradaSelected=''") [alterar]
             h3(v-if="currentReservas").reservas Reservas
-              span.reserva(v-for="reserva in currentReservas") [{{reserva.code}}]
+              span.reserva(v-for="(reserva, index) in currentReservas" @click="unselect(index)") [{{reserva.code}}]
             .entradas(v-if="!entradaSelected")
               .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
                 h3 {{entrada.nome}}
@@ -260,6 +259,10 @@ export default {
 
   methods: {
 
+    unselect(index) {
+      this.currentReservas.splice(index, 1)
+    },
+
     setHov(setor) {
       EventBus.$emit('setHov', setor.nome)
     },
@@ -379,6 +382,10 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .post-page
+  .change
+    cursor pointer
+    color red
+    font-size: 13px
   padding-bottom 300px
   .page-header
     background #efefef

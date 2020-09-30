@@ -6,7 +6,7 @@ import settings  from '../app.settings.json'
  * Inicializa o axios com a base da nossa API
  */
 const instance = axios.create({
-  baseURL: 'https://minhacliente.com.br/wp-json/jwt-auth/v1/'
+  baseURL: settings.api.jwt_url
 })
 
 /**
