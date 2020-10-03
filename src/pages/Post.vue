@@ -50,15 +50,16 @@
               small.change(@click="setorSelected=''") [alterar]
             h3(v-if="entradaSelected") Tipo de entrada: {{entradaSelected.nome}} 
               small.change(@click="entradaSelected=''") [alterar]
-            h3(v-if="currentReservas").reservas Reservas
+            h3(v-if="entradaSelected && currentReservas.length").reservas Reservas
               span.reserva(v-for="(reserva, index) in currentReservas" @click="unselect(index)") [{{reserva.code}}]
             .entradas(v-if="!entradaSelected")
               .entrada(v-for="entrada in setorSelected.entradas" @click="selectEntrada(entrada)" :class="{active: entradaSelected == entrada}")
                 h3 {{entrada.nome}}
-                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected.quantidade)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome]._entradas[entrada.nome].quantidade.qty" type="text")
+                input(v-if="entradaSelected == entrada || (entradaSelected && entradaSelected)" v-model="checkout[post.id].datas[dateSelected.dia].setores[setorSelected.nome]._entradas[entrada.nome].qty" type="text")
+        .right(v-if="!setorSelected")
+          app-map-evento(:mapa="post.acf.mapa_do_evento" v-if="!setorSelected")
         .right(v-if="setorSelected.mostrar_mapa")
-          app-map-evento(:mapa="post.acf.mapa_do_local" v-if="!setorSelected")
-          app-map-setor(:mapa="setorSelected.mapa_do_setor" v-if="entradaSelected")
+          app-map-setor(:mapa="setorSelected.mapa_do_setor")
 
 </template>
 <script>
