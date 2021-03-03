@@ -64,7 +64,7 @@
     "less-loader": "^5.0.0",
     "node-sass": "^4.13.1",
     "npx": "^10.2.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "pug-loader": "^2.4.0",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.25.0",
