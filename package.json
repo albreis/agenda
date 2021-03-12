@@ -28,7 +28,7 @@
     "cordova-plugin-whitelist": "^1.3.4",
     "html-webpack-plugin": "^3.2.0",
     "https-proxy-agent": "^5.0.0",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "net": "^1.0.2",
     "npm-watch": "^0.6.0",
     "onchange": "^6.1.0",
