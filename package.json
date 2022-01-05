@@ -20,7 +20,7 @@
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-jsx": "^1.1.2",
     "@websanova/vue-auth": "^2.21.15-beta",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-es2015": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
